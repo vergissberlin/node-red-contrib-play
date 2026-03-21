@@ -1,0 +1,50 @@
+[
+  {
+    "id": "7a3b2c1d.e4f5a6b7",
+    "type": "tab",
+    "label": "Play sound example",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "9c5d4e3f.a6b7c8d9",
+    "type": "comment",
+    "z": "7a3b2c1d.e4f5a6b7",
+    "name": "About this example",
+    "info": "Click the inject node’s button to play the audio file path in msg.payload.\nChange the payload to a real WAV or MP3 path on your machine.\nIn the playa node, choose a player that exists on your OS (e.g. afplay on macOS, aplay on many Linux systems).",
+    "x": 60,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "8b4c3d2e.f5a6b7c8",
+    "type": "inject",
+    "z": "7a3b2c1d.e4f5a6b7",
+    "name": "play file",
+    "props": [
+      { "p": "payload" },
+      { "p": "topic", "vt": "str" }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "/path/to/your/sound.wav",
+    "payloadType": "str",
+    "x": 140,
+    "y": 160,
+    "wires": [["0d6e5f4a.b7c8d9e0"]]
+  },
+  {
+    "id": "0d6e5f4a.b7c8d9e0",
+    "type": "playa",
+    "z": "7a3b2c1d.e4f5a6b7",
+    "name": "",
+    "player": "afplay",
+    "x": 380,
+    "y": 160,
+    "wires": [[]]
+  }
+]

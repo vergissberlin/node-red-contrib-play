@@ -19,7 +19,15 @@
     "sound",
     "wav"
   ],
+  "files": [
+    "play.js",
+    "play.html",
+    "examples",
+    "LICENSE",
+    "README.md"
+  ],
   "node-red": {
+    "version": ">=2.0.0",
     "nodes": {
       "playa": "play.js"
     }
