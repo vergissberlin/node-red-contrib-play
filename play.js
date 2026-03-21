@@ -14,7 +14,7 @@
 module.exports = function(RED) {
 	'use strict';
 
-	var player = require('play-sound')(opts = {});
+	var player = require('play-sound')({});
 
 	/**
 	 * Player options
