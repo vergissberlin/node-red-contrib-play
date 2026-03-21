@@ -21,5 +21,5 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          release-type: node
+          # Uses release-please-config.json + .release-please-manifest.json (chore/docs in changelog + releases).
           # token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
