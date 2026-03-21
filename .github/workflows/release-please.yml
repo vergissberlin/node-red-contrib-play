@@ -29,11 +29,10 @@ jobs:
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
+      # Picks up release-please-config.json + .release-please-manifest.json by default.
+      # Optional: pass token: ${{ secrets.RELEASE_PLEASE_TOKEN }} under `with` if you use a PAT.
       - id: release
         uses: googleapis/release-please-action@v4
-        with:
-          # Uses release-please-config.json + .release-please-manifest.json (chore/docs in changelog + releases).
-          # token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
   publish-npm:
     needs: release-please
