@@ -1,9 +1,11 @@
 # Release Please: opens/updates a release PR from Conventional Commits, then tags + GitHub Release on merge.
 # Runs only after the test matrix succeeds on main (no release PR update / tag if tests fail).
+# When a release is created, publishes the package to https://www.npmjs.com/ (needs repo secret NPM_TOKEN).
 # Repo settings (manual): Settings → Actions → General → Workflow permissions: read/write;
 # enable "Allow GitHub Actions to create and approve pull requests" if needed (orgs).
 # Optional: add secret RELEASE_PLEASE_TOKEN (PAT) and uncomment `token` below so other workflows run on the release PR.
 # For merges to main via human PRs, also enable branch protection requiring the "test" check.
+# npm: create an "Automation" access token at https://www.npmjs.com/settings/~/tokens and add it as NPM_TOKEN.
 
 on:
   push:
@@ -24,8 +26,38 @@ jobs:
   release-please:
     needs: test
     runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
-      - uses: googleapis/release-please-action@v4
+      - id: release
+        uses: googleapis/release-please-action@v4
         with:
           # Uses release-please-config.json + .release-please-manifest.json (chore/docs in changelog + releases).
           # token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+
+  publish-npm:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Publish to npm
+        run: pnpm publish --no-git-checks --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
