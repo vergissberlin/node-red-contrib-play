@@ -1,0 +1,25 @@
+# Release Please: opens/updates a release PR from Conventional Commits, then tags + GitHub Release on merge.
+# Repo settings (manual): Settings → Actions → General → Workflow permissions: read/write;
+# enable "Allow GitHub Actions to create and approve pull requests" if needed (orgs).
+# Optional: add secret RELEASE_PLEASE_TOKEN (PAT) and uncomment `token` below so other workflows run on the release PR.
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+name: release-please
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          release-type: node
+          # token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
