@@ -1,9 +1,12 @@
 # Release Please: opens/updates a release PR from Conventional Commits, then tags + GitHub Release on merge.
 # Runs only after the test matrix succeeds on main (no release PR update / tag if tests fail).
 # When a release is created, publishes the package to https://www.npmjs.com/ (needs repo secret NPM_TOKEN).
-# Repo settings (manual): Settings → Actions → General → Workflow permissions: read/write;
-# enable "Allow GitHub Actions to create and approve pull requests" if needed (orgs).
-# Optional: add secret RELEASE_PLEASE_TOKEN (PAT) and uncomment `token` below so other workflows run on the release PR.
+# Repo settings (manual): Settings → Actions → General → Workflow permissions:
+#   set "Workflow permissions" to "Read and write permissions" (not read-only).
+#   enable "Allow GitHub Actions to create and approve pull requests" if release-please cannot open/update PRs.
+# If you still get "Resource not accessible by integration" on create release, the org may forbid elevating
+# the token via the workflow file — add a classic PAT with `repo` scope as secret RELEASE_PLEASE_TOKEN and
+# pass it under `with.token` on the release-please step (see comment on that step).
 # For merges to main via human PRs, also enable branch protection requiring the "test" check.
 # npm: create an "Automation" access token at https://www.npmjs.com/settings/~/tokens and add it as NPM_TOKEN.
 
@@ -26,11 +29,18 @@ jobs:
   release-please:
     needs: test
     runs-on: ubuntu-latest
+    # Explicit permissions so create-release works (needs contents: write). Workflow-level permissions
+    # are sometimes overridden by org defaults; job-level makes the intent obvious to GitHub.
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
       # Picks up release-please-config.json + .release-please-manifest.json by default.
-      # Optional: pass token: ${{ secrets.RELEASE_PLEASE_TOKEN }} under `with` if you use a PAT.
+      # PAT fallback if GITHUB_TOKEN cannot create releases (org policy): create secret RELEASE_PLEASE_TOKEN,
+      # then add under this step: `with: { token: ${{ secrets.RELEASE_PLEASE_TOKEN }} }`
       - id: release
         uses: googleapis/release-please-action@v4
 
