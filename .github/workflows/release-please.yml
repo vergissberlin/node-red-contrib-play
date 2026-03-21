@@ -9,6 +9,8 @@
 # pass it under `with.token` on the release-please step (see comment on that step).
 # For merges to main via human PRs, also enable branch protection requiring the "test" check.
 # npm: create an "Automation" access token at https://www.npmjs.com/settings/~/tokens and add it as NPM_TOKEN.
+# If create-release fails with "Resource not accessible by integration" but permissions are read/write, check
+# merged release PRs for a stuck `autorelease: pending` label and remove it (see googleapis/release-please-action#1070).
 
 on:
   push:
