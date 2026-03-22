@@ -3,6 +3,7 @@
 		"label": {
 			"name": "Nom",
 			"player": "Lecteur",
+			"playerAuto": "Automatique",
 			"soundPath": "Chemin du fichier audio",
 			"upload": "Téléverser un fichier audio",
 			"preview": "Aperçu",
@@ -15,7 +16,8 @@
 		},
 		"notify": {
 			"uploadSuccess": "Fichier téléversé",
-			"uploadFail": "Échec du téléversement"
+			"uploadFail": "Échec du téléversement",
+			"playersLoadFallback": "Impossible de charger la liste des lecteurs ; utilisation d’une liste de secours."
 		},
 		"preview": {
 			"errorNotFound": "Fichier introuvable ou illisible.",

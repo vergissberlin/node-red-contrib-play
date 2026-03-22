@@ -28,6 +28,43 @@ RED.nodes.registerType('playa', {
 			base += '/';
 		}
 
+		var playerSelect = $('#node-input-player');
+		var savedPlayer = (typeof this.player !== 'undefined' && this.player != null) ? String(this.player) : '';
+
+		function populatePlayerSelect(players) {
+			playerSelect.empty();
+			playerSelect.append($('<option></option>').attr('value', '').text(RED._('playa.label.playerAuto')));
+			var hasSaved = false;
+			(players || []).forEach(function (p) {
+				if (p === savedPlayer) {
+					hasSaved = true;
+				}
+				playerSelect.append($('<option></option>').attr('value', p).text(p));
+			});
+			if (savedPlayer && !hasSaved) {
+				playerSelect.append($('<option></option>').attr('value', savedPlayer).text(savedPlayer));
+			}
+			playerSelect.val(savedPlayer);
+		}
+
+		fetch(base + 'contrib-playa/players', {credentials: 'include'})
+			.then(function (res) {
+				if (!res.ok) {
+					throw new Error('players');
+				}
+				return res.json();
+			})
+			.then(function (data) {
+				if (!data || !Array.isArray(data.players)) {
+					throw new Error('players');
+				}
+				populatePlayerSelect(data.players);
+			})
+			.catch(function () {
+				RED.notify(RED._('playa.notify.playersLoadFallback'), 'warning');
+				populatePlayerSelect(['mplayer', 'mpg123', 'play', 'afplay', 'aplay']);
+			});
+
 		function revokePreviewUrl() {
 			if (playaPreviewObjectUrl) {
 				URL.revokeObjectURL(playaPreviewObjectUrl);
@@ -167,15 +204,7 @@ RED.nodes.registerType('playa', {
 	</div>
 	<div class="form-row">
 		<label for="node-input-player"><i class="icon-tag"></i> <span data-i18n="playa.label.player"></span></label>
-		<select type="text" id="node-input-player" style="width: 320px">
-			<option value="mplayer">mplayer</option>
-			<option value="afplay">afplay</option>
-			<option value="mpg123">mpg123</option>
-			<option value="play">play</option>
-			<option value="omxplayer">omxplayer</option>
-			<option value="aplay">aplay</option>
-			<option value="cmdmp3">cmdmp3</option>
-		</select>
+		<select type="text" id="node-input-player" style="width: 320px"></select>
 	</div>
 </script>
 

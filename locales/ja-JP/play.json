@@ -3,6 +3,7 @@
 		"label": {
 			"name": "名前",
 			"player": "プレーヤー",
+			"playerAuto": "自動",
 			"soundPath": "音声ファイルのパス",
 			"upload": "音声ファイルをアップロード",
 			"preview": "プレビュー",
@@ -15,7 +16,8 @@
 		},
 		"notify": {
 			"uploadSuccess": "ファイルをアップロードしました",
-			"uploadFail": "アップロードに失敗しました"
+			"uploadFail": "アップロードに失敗しました",
+			"playersLoadFallback": "プレーヤー一覧を読み込めませんでした。汎用の一覧を使います。"
 		},
 		"preview": {
 			"errorNotFound": "ファイルが見つからないか読み取れません。",

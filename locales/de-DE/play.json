@@ -3,6 +3,7 @@
 		"label": {
 			"name": "Name",
 			"player": "Player",
+			"playerAuto": "Automatisch",
 			"soundPath": "Pfad zur Sounddatei",
 			"upload": "Sounddatei hochladen",
 			"preview": "Vorschau",
@@ -15,7 +16,8 @@
 		},
 		"notify": {
 			"uploadSuccess": "Datei hochgeladen",
-			"uploadFail": "Upload fehlgeschlagen"
+			"uploadFail": "Upload fehlgeschlagen",
+			"playersLoadFallback": "Player-Liste konnte nicht geladen werden; es wird ein Fallback verwendet."
 		},
 		"preview": {
 			"errorNotFound": "Datei nicht gefunden oder nicht lesbar.",

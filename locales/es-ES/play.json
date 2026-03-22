@@ -3,6 +3,7 @@
 		"label": {
 			"name": "Nombre",
 			"player": "Reproductor",
+			"playerAuto": "Automático",
 			"soundPath": "Ruta del archivo de audio",
 			"upload": "Subir archivo de audio",
 			"preview": "Vista previa",
@@ -15,7 +16,8 @@
 		},
 		"notify": {
 			"uploadSuccess": "Archivo subido",
-			"uploadFail": "Error al subir"
+			"uploadFail": "Error al subir",
+			"playersLoadFallback": "No se pudo cargar la lista de reproductores; se usa una lista genérica."
 		},
 		"preview": {
 			"errorNotFound": "Archivo no encontrado o no legible.",

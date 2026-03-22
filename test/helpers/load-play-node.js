@@ -10,9 +10,13 @@ const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 /**
  * @param {function(string, function(Error|null): void): { kill?: function(): void }} playImpl
  *        Implementation for the play-sound instance’s `.play(what, options?, next?)` behaviour.
+ * @param {{ playSoundOptsLog?: object[] }} [options]
  * @returns {{ RED: object, PlayaNode: function(object): import('events').EventEmitter }}
  */
-function loadPlayWithMock(playImpl) {
+function loadPlayWithMock(playImpl, options) {
+	if (!options) {
+		options = {};
+	}
 	const registered = {};
 	const RED = {
 		settings: {
@@ -55,10 +59,13 @@ function loadPlayWithMock(playImpl) {
 		_registered: registered
 	};
 
-	const playSoundPackage = function mockPlaySoundPackage() {
+	const playSoundPackage = function mockPlaySoundPackage(opts) {
+		if (options.playSoundOptsLog) {
+			options.playSoundOptsLog.push(opts);
+		}
 		return {
-			play: function play(what, options, next) {
-				next = typeof options === 'function' ? options : next;
+			play: function play(what, playOptions, next) {
+				next = typeof playOptions === 'function' ? playOptions : next;
 				return playImpl(what, next || function noop() {});
 			}
 		};

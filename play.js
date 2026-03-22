@@ -14,12 +14,72 @@
 module.exports = function(RED) {
 	'use strict';
 
+	var child_process = require('child_process');
 	var crypto = require('crypto');
 	var fs = require('fs');
 	var path = require('path');
 	var multer = require('multer');
 
-	var player = require('play-sound')({});
+	var createPlaySound = require('play-sound');
+
+	var PLAYERS_BY_PLATFORM = {
+		darwin: ['afplay', 'mplayer', 'mpg123', 'mpg321', 'play'],
+		linux: ['aplay', 'mpg123', 'mplayer', 'play', 'omxplayer', 'mpg321', 'cvlc'],
+		win32: ['cmdmp3', 'powershell'],
+		default: ['mplayer', 'mpg123', 'mpg321', 'play', 'cvlc']
+	};
+
+	var PLAYERS_ROUTE = '/contrib-playa/players';
+	var cachedPlayersPayload = null;
+
+	function normalizePlatform(platform) {
+		if (platform === 'darwin') {
+			return 'darwin';
+		}
+		if (platform === 'linux') {
+			return 'linux';
+		}
+		if (platform === 'win32') {
+			return 'win32';
+		}
+		return 'default';
+	}
+
+	function playersForPlatform(platform) {
+		var key = normalizePlatform(platform);
+		var list = PLAYERS_BY_PLATFORM[key];
+		return list && list.length ? list.slice() : PLAYERS_BY_PLATFORM.default.slice();
+	}
+
+	function commandExists(cmd) {
+		try {
+			if (process.platform === 'win32') {
+				child_process.execSync('where ' + cmd, {stdio: 'ignore'});
+			} else {
+				child_process.execSync('which ' + cmd, {stdio: 'ignore'});
+			}
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
+
+	function filterPlayersOnPath(candidates) {
+		var filtered = candidates.filter(commandExists);
+		return filtered.length ? filtered : candidates;
+	}
+
+	function getPlayersApiPayload() {
+		if (cachedPlayersPayload) {
+			return cachedPlayersPayload;
+		}
+		var raw = playersForPlatform(process.platform);
+		cachedPlayersPayload = {
+			platform: process.platform,
+			players: filterPlayersOnPath(raw)
+		};
+		return cachedPlayersPayload;
+	}
 
 	var ALLOWED_EXT = new Set(['.wav', '.mp3', '.ogg', '.flac', '.m4a', '.aac']);
 	var MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
@@ -132,6 +192,14 @@ module.exports = function(RED) {
 		}
 	);
 
+	RED.httpAdmin.get(
+		PLAYERS_ROUTE,
+		RED.auth.needsPermission('flows.read'),
+		function(req, res) {
+			res.json(getPlayersApiPayload());
+		}
+	);
+
 	/**
 	 * Player options
 	 *
@@ -141,10 +209,18 @@ module.exports = function(RED) {
 		RED.nodes.createNode(this, config);
 		var node = this;
 		var soundPath = config.soundPath != null ? config.soundPath : '';
+		var playerName = (config.player != null && String(config.player).trim()) || '';
+		var playerOpts = {};
+		if (playerName) {
+			playerOpts.player = playerName;
+		} else {
+			playerOpts.players = playersForPlatform(process.platform);
+		}
+		var audioPlayer = createPlaySound(playerOpts);
 
 		this.on('input', function(msg) {
 			var pathToPlay = msg.payload || soundPath || this.name;
-			var audio = player.play(
+			var audio = audioPlayer.play(
 				pathToPlay,
 				function(err) {
 					if (err) {

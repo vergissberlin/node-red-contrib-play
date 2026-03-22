@@ -3,6 +3,7 @@
 		"label": {
 			"name": "الاسم",
 			"player": "المشغّل",
+			"playerAuto": "تلقائي",
 			"soundPath": "مسار ملف الصوت",
 			"upload": "رفع ملف صوتي",
 			"preview": "معاينة",
@@ -15,7 +16,8 @@
 		},
 		"notify": {
 			"uploadSuccess": "تم رفع الملف",
-			"uploadFail": "فشل الرفع"
+			"uploadFail": "فشل الرفع",
+			"playersLoadFallback": "تعذّر تحميل قائمة المشغّلات؛ جارٍ استخدام قائمة احتياطية عامة."
 		},
 		"preview": {
 			"errorNotFound": "الملف غير موجود أو غير قابل للقراءة.",

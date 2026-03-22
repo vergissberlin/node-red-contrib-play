@@ -102,4 +102,25 @@ describe('playa node', () => {
 		assert.ok(node._err instanceof Error);
 		assert.strictEqual(node._err.message, 'async fail');
 	});
+
+	it('passes explicit player to play-sound factory', () => {
+		const playImpl = () => ({ kill: () => {} });
+		const optsLog = [];
+		const { PlayaNode } = loadPlayWithMock(playImpl, { playSoundOptsLog: optsLog });
+		new PlayaNode({ name: 'x', id: 'n-player-explicit', player: 'afplay' });
+		assert.strictEqual(optsLog.length, 1);
+		assert.strictEqual(optsLog[0].player, 'afplay');
+		assert.strictEqual(optsLog[0].players, undefined);
+	});
+
+	it('passes platform players list to play-sound when player is empty', () => {
+		const playImpl = () => ({ kill: () => {} });
+		const optsLog = [];
+		const { PlayaNode } = loadPlayWithMock(playImpl, { playSoundOptsLog: optsLog });
+		new PlayaNode({ name: 'x', id: 'n-player-auto', player: '' });
+		assert.strictEqual(optsLog.length, 1);
+		assert.strictEqual(optsLog[0].player, undefined);
+		assert.ok(Array.isArray(optsLog[0].players));
+		assert.ok(optsLog[0].players.length > 0);
+	});
 });

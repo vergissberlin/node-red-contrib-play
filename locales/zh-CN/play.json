@@ -3,6 +3,7 @@
 		"label": {
 			"name": "名称",
 			"player": "播放器",
+			"playerAuto": "自动",
 			"soundPath": "音频文件路径",
 			"upload": "上传音频文件",
 			"preview": "预览",
@@ -15,7 +16,8 @@
 		},
 		"notify": {
 			"uploadSuccess": "文件已上传",
-			"uploadFail": "上传失败"
+			"uploadFail": "上传失败",
+			"playersLoadFallback": "无法加载播放器列表，已使用通用后备列表。"
 		},
 		"preview": {
 			"errorNotFound": "找不到文件或无法读取。",

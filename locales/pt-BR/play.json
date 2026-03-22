@@ -3,6 +3,7 @@
 		"label": {
 			"name": "Nome",
 			"player": "Reprodutor",
+			"playerAuto": "Automático",
 			"soundPath": "Caminho do arquivo de áudio",
 			"upload": "Enviar arquivo de áudio",
 			"preview": "Pré-visualização",
@@ -15,7 +16,8 @@
 		},
 		"notify": {
 			"uploadSuccess": "Arquivo enviado",
-			"uploadFail": "Falha no envio"
+			"uploadFail": "Falha no envio",
+			"playersLoadFallback": "Não foi possível carregar a lista de reprodutores; usando lista genérica."
 		},
 		"preview": {
 			"errorNotFound": "Arquivo não encontrado ou ilegível.",

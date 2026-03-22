@@ -3,6 +3,7 @@
 		"label": {
 			"name": "नाम",
 			"player": "प्लेयर",
+			"playerAuto": "स्वचालित",
 			"soundPath": "साउंड फ़ाइल का पथ",
 			"upload": "साउंड फ़ाइल अपलोड करें",
 			"preview": "पूर्वावलोकन",
@@ -15,7 +16,8 @@
 		},
 		"notify": {
 			"uploadSuccess": "फ़ाइल अपलोड हो गई",
-			"uploadFail": "अपलोड विफल"
+			"uploadFail": "अपलोड विफल",
+			"playersLoadFallback": "प्लेयर सूची लोड नहीं हो सकी; सामान्य फ़ॉलबैक उपयोग किया जा रहा है।"
 		},
 		"preview": {
 			"errorNotFound": "फ़ाइल नहीं मिली या पढ़ी नहीं जा सकती।",
