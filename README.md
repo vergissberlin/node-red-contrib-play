@@ -58,6 +58,35 @@ pnpm run players:verify-afplay
 
 If that fails, the problem is outside Node-RED (path, permissions, or `afplay` itself).
 
+# Deploy and Host
+
+## About Hosting
+
+**playa** runs inside the **Node-RED runtime** on the machine you install it on (bare metal, VM, container, Raspberry Pi, etc.). Sound is played on **that host** via a local CLI player—not in the end user’s browser. The Node-RED **editor** is web-based; **playback** always happens where Node-RED’s process runs.
+
+For a **Railway** demo URL, login table, and short Node-RED intro meant for template listings, see **[RAILWAY.md](RAILWAY.md)**.
+
+## Why Deploy
+
+In Node-RED, changes to a flow only affect the runtime after you **Deploy**. Until then, the **playa** node is not active with your latest wiring. The editor **stop** control on the node also targets the **deployed** runtime via the admin HTTP API, so the flow must be deployed for stop and playback to apply to the running instance.
+
+## Common Use Cases
+
+- **Home / building automation:** chimes, alerts, or short clips when events fire.
+- **Kiosks and dashboards:** audio feedback on the same machine that runs Node-RED.
+- **Labs and ops:** audible signals when flows complete or when monitored conditions change.
+
+## Dependencies for
+
+Runtime and packaging expectations when you ship Node-RED with this node.
+
+### Deployment Dependencies
+
+- **Node.js** `>= 18` and **Node-RED** `>= 2.0.0` (see [Requirements](#requirements)).
+- **Audio CLI** on the host `PATH` (see [Requirements](#requirements) and [Install](#install)); install the right packages in the image or OS before starting Node-RED.
+- **Permissions:** the OS user running Node-RED must be able to read sound files and execute the chosen player.
+- **Containers:** install a player inside the image, keep file paths valid inside the container, and grant device or audio access if your stack requires it (e.g. ALSA/Pulse on Linux).
+
 ## Usage
 
 ### Message contract
