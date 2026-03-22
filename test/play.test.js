@@ -285,10 +285,11 @@ describe('playa node', () => {
 		node.emit('input', { payload: FIXTURE_WAV });
 		await new Promise((r) => setImmediate(r));
 		await new Promise((r) => setImmediate(r));
+		// First tick uses Date.now() twice; ≥1 ms between calls floors 125 s to 2:04, not 2:05.
 		const hasRemaining = node._statusLog.some(function (s) {
-			return s && s.text && String(s.text).includes('2:05');
+			return s && s.text && /2:0[4-5]/.test(String(s.text));
 		});
-		assert.ok(hasRemaining, 'expected status text with remaining time (e.g. ~2:05)');
+		assert.ok(hasRemaining, 'expected status text with remaining time (e.g. ~2:05 or ~2:04)');
 	});
 
 	it('passes platform players list to play-sound when player is empty', () => {
