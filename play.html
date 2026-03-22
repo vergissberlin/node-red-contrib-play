@@ -21,6 +21,7 @@ RED.nodes.registerType('playa', {
 		return this._('playa.paletteLabel');
 	},
 	oneditprepare: function () {
+		var that = this;
 		var fileInput = $('#node-input-playa-file');
 		var uploadBtn = $('#node-input-playa-upload-btn');
 		var uploadStatus = $('#node-input-playa-upload-status');
@@ -37,7 +38,7 @@ RED.nodes.registerType('playa', {
 
 		function populatePlayerSelect(players) {
 			playerSelect.empty();
-			playerSelect.append($('<option></option>').attr('value', '').text(RED._('playa.label.playerAuto')));
+			playerSelect.append($('<option></option>').attr('value', '').text(that._('playa.label.playerAuto')));
 			var hasSaved = false;
 			(players || []).forEach(function (p) {
 				if (p === savedPlayer) {
@@ -65,7 +66,7 @@ RED.nodes.registerType('playa', {
 				populatePlayerSelect(data.players);
 			})
 			.catch(function () {
-				RED.notify(RED._('playa.notify.playersLoadFallback'), 'warning');
+				RED.notify(that._('playa.notify.playersLoadFallback'), 'warning');
 				populatePlayerSelect(['mplayer', 'mpg123', 'play', 'afplay', 'aplay']);
 			});
 
@@ -81,7 +82,7 @@ RED.nodes.registerType('playa', {
 		}
 
 		function showPreviewError(i18nKey) {
-			previewError.text(RED._(i18nKey)).show();
+			previewError.text(that._(i18nKey)).show();
 		}
 
 		function clearPreviewError() {
@@ -138,17 +139,17 @@ RED.nodes.registerType('playa', {
 			}
 			uploadStatus.show();
 			if (state === 'uploading') {
-				uploadStatus.css('color', '#888').text(RED._('playa.upload.uploading'));
+				uploadStatus.css('color', '#888').text(that._('playa.upload.uploading'));
 			} else if (state === 'ok') {
 				uploadStatus.addClass('playa-upload-ok').css('color', '#2e7d32');
-				var line = RED._('playa.upload.success');
+				var line = that._('playa.upload.success');
 				if (detail) {
 					line += ' ' + detail;
 				}
 				uploadStatus.text(line);
 			} else {
 				uploadStatus.addClass('playa-upload-err').css('color', '#AD1625');
-				uploadStatus.text(RED._('playa.upload.failed') + ' ' + (detail || ''));
+				uploadStatus.text(that._('playa.upload.failed') + ' ' + (detail || ''));
 			}
 		}
 
@@ -265,14 +266,14 @@ RED.nodes.registerType('playa', {
 					return res.json();
 				})
 				.then(function () {
-					RED.notify(RED._('playa.notify.stopOk'), { type: 'success', timeout: 2000 });
+					RED.notify(node._('playa.notify.stopOk'), { type: 'success', timeout: 2000 });
 				})
 				.catch(function (err) {
 					var msg = err && err.message ? err.message : String(err);
 					if (err && err.status === 404) {
-						RED.notify(RED._('playa.notify.stopNotDeployed'), { type: 'warning', timeout: 2500 });
+						RED.notify(node._('playa.notify.stopNotDeployed'), { type: 'warning', timeout: 2500 });
 					} else {
-						RED.notify(RED._('playa.notify.stopFailed') + ' ' + msg, 'error');
+						RED.notify(node._('playa.notify.stopFailed') + ' ' + msg, 'error');
 					}
 				});
 		}

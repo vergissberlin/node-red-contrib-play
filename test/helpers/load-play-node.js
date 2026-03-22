@@ -28,10 +28,13 @@ function loadPlayWithMock(playImpl, options) {
 		_postHandlers: [],
 		httpAdmin: {
 			post: function post(route, auth, handler) {
-				if (typeof auth === 'function') {
-					handler = auth;
+				if (arguments.length >= 3 && typeof handler === 'function') {
+					RED._postHandlers.push({ route, handler });
+					return;
 				}
-				RED._postHandlers.push({ route, handler });
+				if (typeof auth === 'function') {
+					RED._postHandlers.push({ route, handler: auth });
+				}
 			},
 			get: function get() {
 				// Preview route registration; no-op for unit tests.
