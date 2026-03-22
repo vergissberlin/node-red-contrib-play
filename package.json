@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-play",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Output node for node-red to play sounds.",
   "main": "play.js",
   "scripts": {

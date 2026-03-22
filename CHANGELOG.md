@@ -7,6 +7,13 @@
 * Editor UI and Info sidebar help for **playa** internationalised in ten locales: en-US, zh-CN, es-ES, hi-IN, ar-EG, fr-FR, pt-BR, de-DE, ja-JP, ru-RU (follows the Node-RED editor language).
 * **examples:** add bundled samples `examples/sounds/beep.wav` and `beep.mp3`, `examples/README.md`, flows `Play bundled beep.wav.json`, `Play bundled beep.mp3.json`, and `Play bundled beep compare wav and mp3.json`; script `scripts/encode-beep-mp3.mjs` to regenerate the MP3 from the WAV.
 
+## [0.2.1](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.2.0...v0.2.1) (2026-03-22)
+
+
+### Bug Fixes
+
+* **load-play-node.js:** mock available players to ensure tests do not depend on host PATH ([11e07d2](https://github.com/vergissberlin/node-red-contrib-play/commit/11e07d22915877d8977bd02b4ba9fe6ad8c6ef0d))
+
 ## [0.2.0](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.1.0...v0.2.0) (2026-03-22)
 
 
