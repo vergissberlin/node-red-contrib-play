@@ -18,10 +18,10 @@ module.exports = function(RED) {
 	var fs = require('fs');
 	var path = require('path');
 	var multer = require('multer');
-	var parseFile = require('music-metadata').parseFile;
 
 	var createPlaySound = require('play-sound');
 	var ap = require('./lib/available-players.js');
+	var getAudioDurationSeconds = require('./lib/audio-duration.js');
 
 	var PLAYERS_ROUTE = '/contrib-playa/players';
 	var cachedPlayersPayload = null;
@@ -226,6 +226,37 @@ module.exports = function(RED) {
 	}
 
 	/**
+	 * Runtime i18n does not interpolate `{{remaining}}` the way the editor does — load the
+	 * template and substitute manually so the badge never shows a literal `~{{remaining}}`.
+	 *
+	 * @param {*} node
+	 * @param {string} remainingFormatted
+	 * @returns {string}
+	 */
+	function formatRemainingStatusText(node, remainingFormatted) {
+		var key = 'playa.status.remaining';
+		var template = null;
+		if (typeof node._ === 'function') {
+			try {
+				template = node._(key);
+			} catch (e) {
+				// ignore
+			}
+		}
+		if ((template == null || template === key) && typeof RED._ === 'function') {
+			try {
+				template = RED._(key);
+			} catch (e) {
+				// ignore
+			}
+		}
+		if (typeof template === 'string' && template !== key && /\{\{\s*remaining\s*\}\}/.test(template)) {
+			return template.replace(/\{\{\s*remaining\s*\}\}/g, remainingFormatted);
+		}
+		return '~' + remainingFormatted;
+	}
+
+	/**
 	 * @param {*} err play-sound passes exit code from `close` or an Error from spawn
 	 * @param {{ path?: string, player?: string }} [ctx]
 	 */
@@ -393,21 +424,7 @@ module.exports = function(RED) {
 			}
 
 			(async function() {
-				var durationSec = null;
-				if (!isHttp) {
-					try {
-						var meta = await parseFile(pathToPlay);
-						if (
-							meta.format.duration != null &&
-							Number.isFinite(meta.format.duration) &&
-							meta.format.duration > 0
-						) {
-							durationSec = meta.format.duration;
-						}
-					} catch (e) {
-						// ignore — keep generic playing status
-					}
-				}
+				var durationSec = isHttp ? null : await getAudioDurationSeconds(pathToPlay);
 				if (token.cancelled || playbackEnded || durationSec == null) {
 					return;
 				}
@@ -419,9 +436,7 @@ module.exports = function(RED) {
 					}
 					var elapsed = (Date.now() - startTime) / 1000;
 					var remaining = Math.max(0, durationSec - elapsed);
-					var text = node._('playa.status.remaining', {
-						remaining: formatMmSs(remaining)
-					});
+					var text = formatRemainingStatusText(node, formatMmSs(remaining));
 					node.status({ fill: 'blue', shape: 'dot', text: text });
 				}
 

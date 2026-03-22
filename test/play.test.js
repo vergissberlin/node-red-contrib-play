@@ -275,6 +275,22 @@ describe('playa node', () => {
 		assert.strictEqual(optsLog[0].players, undefined);
 	});
 
+	it('shows remaining duration in status when metadata duration is available', async () => {
+		const playImpl = (path, cb) => {
+			setImmediate(() => cb(null));
+			return { kill: () => {} };
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl, { audioDurationSeconds: 125 });
+		const node = new PlayaNode({ name: 'x', id: 'n-remaining' });
+		node.emit('input', { payload: FIXTURE_WAV });
+		await new Promise((r) => setImmediate(r));
+		await new Promise((r) => setImmediate(r));
+		const hasRemaining = node._statusLog.some(function (s) {
+			return s && s.text && String(s.text).includes('2:05');
+		});
+		assert.ok(hasRemaining, 'expected status text with remaining time (e.g. ~2:05)');
+	});
+
 	it('passes platform players list to play-sound when player is empty', () => {
 		const playImpl = () => ({ kill: () => {} });
 		const optsLog = [];

@@ -78,6 +78,7 @@ By default the node **sends the incoming message** to the output right after pla
 - **Player:** The dropdown is filled from the **Node-RED server** (not the browser): it lists CLI players that match the server OS and, when possible, that are found on `PATH`. Choose **Automatic** to let `play-sound` pick the first available binary in that order. A value saved from another machine/OS may still appear as an extra option so the flow stays editable.
 - **Stop previous playback:** When enabled (default), starting a new sound stops the still-running player from the previous input. Disable to allow overlapping playback from rapid triggers.
 - **Send output when playback finishes:** When enabled, `msg` is sent after the player exits successfully; when disabled (default), `msg` is sent immediately after the play process is spawned (legacy behaviour).
+- **Status:** While a **local file** is playing, the node badge can show **approximate remaining time** (e.g. `~1:23`), derived from file metadata. **HTTP(S) URLs** or formats where duration cannot be read keep the plain blue playing indicator. The estimate may drift slightly from the CLI player’s actual progress.
 
 ### Example flow
 

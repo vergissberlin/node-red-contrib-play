@@ -10,13 +10,15 @@ const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 /**
  * @param {function(string, function(Error|null): void): { kill?: function(): void }} playImpl
  *        Implementation for the play-sound instance’s `.play(what, options?, next?)` behaviour.
- * @param {{ playSoundOptsLog?: object[] }} [options]
+ * @param {{ playSoundOptsLog?: object[], audioDurationSeconds?: number|null }} [options]
  * @returns {{ RED: object, PlayaNode: function(object): import('events').EventEmitter }}
  */
 function loadPlayWithMock(playImpl, options) {
 	if (!options) {
 		options = {};
 	}
+	var audioDurationSeconds =
+		options.audioDurationSeconds !== undefined ? options.audioDurationSeconds : null;
 	const registered = {};
 	const RED = {
 		settings: {
@@ -56,9 +58,9 @@ function loadPlayWithMock(playImpl, options) {
 					node._err = err;
 				};
 				node.warn = function () {};
-				node._ = function _(key, params) {
-					if (key === 'playa.status.remaining' && params && params.remaining != null) {
-						return '~' + params.remaining;
+				node._ = function _(key) {
+					if (key === 'playa.status.remaining') {
+						return '~{{remaining}}';
 					}
 					return key;
 				};
@@ -113,10 +115,8 @@ function loadPlayWithMock(playImpl, options) {
 	proxyquire(playPath, {
 		'play-sound': playSoundPackage,
 		multer: mockMulter,
-		'music-metadata': {
-			parseFile: async function parseFileMock() {
-				return { format: { duration: null } };
-			}
+		'./lib/audio-duration.js': async function mockDuration() {
+			return audioDurationSeconds;
 		}
 	})(RED);
 
