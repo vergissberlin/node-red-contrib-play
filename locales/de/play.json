@@ -1,0 +1,20 @@
+{
+	"playa": {
+		"label": {
+			"name": "Name",
+			"player": "Player",
+			"soundPath": "Pfad zur Sounddatei",
+			"upload": "Sounddatei hochladen",
+			"node": "playa"
+		},
+		"paletteLabel": "Ton abspielen",
+		"placeholder": {
+			"name": "Pfad zur Sounddatei",
+			"soundPath": "Absoluter Pfad oder unten eine Datei hochladen"
+		},
+		"notify": {
+			"uploadSuccess": "Datei hochgeladen",
+			"uploadFail": "Upload fehlgeschlagen"
+		}
+	}
+}
