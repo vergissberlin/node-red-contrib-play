@@ -4,7 +4,6 @@
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/programmerqeu/node-red-contrib-play/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/programmerqeu/node-red-contrib-play/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/programmerqeu/node-red-contrib-play/badges/build.png?b=master)](https://scrutinizer-ci.com/g/programmerqeu/node-red-contrib-play/build-status/master)
-[![NSP Status](https://nodesecurity.io/orgs/programmerq/projects/8973ed4b-846d-4e2d-931d-7449c87576e8/badge)](https://nodesecurity.io/orgs/programmerq/projects/8973ed4b-846d-4e2d-931d-7449c87576e8)
 
 ## What it does
 
