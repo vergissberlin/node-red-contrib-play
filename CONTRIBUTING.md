@@ -72,11 +72,11 @@ node-red --userDir /path/to/my-nr-data
 
 ## What to edit
 
-| File | Purpose |
-|------|---------|
-| `play.js` | Runtime: registers the node, handles messages, calls `play-sound`. |
-| `play.html` | Editor: palette label, defaults, and the edit dialog. |
-| `examples/*.json` | Sample flows for **Menu → Import**. |
+| File              | Purpose                                                            |
+|-------------------|--------------------------------------------------------------------|
+| `play.js`         | Runtime: registers the node, handles messages, calls `play-sound`. |
+| `play.html`       | Editor: palette label, defaults, and the edit dialog.              |
+| `examples/*.json` | Sample flows for **Menu → Import**.                                |
 
 ## Audio player on the dev machine
 
