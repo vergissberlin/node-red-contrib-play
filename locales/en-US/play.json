@@ -14,7 +14,7 @@
 		},
 		"paletteLabel": "play sound",
 		"placeholder": {
-			"name": "Path to sound file",
+			"name": "Optional label; last fallback if no path",
 			"soundPath": "Absolute path or use the upload button above"
 		},
 		"upload": {

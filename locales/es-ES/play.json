@@ -14,7 +14,7 @@
 		},
 		"paletteLabel": "reproducir sonido",
 		"placeholder": {
-			"name": "Ruta del archivo de audio",
+			"name": "Nombre opcional (etiqueta; último recurso de ruta)",
 			"soundPath": "Ruta absoluta o use el botón de subida arriba"
 		},
 		"upload": {

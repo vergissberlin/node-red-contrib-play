@@ -14,7 +14,7 @@
 		},
 		"paletteLabel": "lire un son",
 		"placeholder": {
-			"name": "Chemin du fichier audio",
+			"name": "Nom facultatif (étiquette ; dernier recours pour le chemin)",
 			"soundPath": "Chemin absolu ou bouton de téléversement ci-dessus"
 		},
 		"upload": {

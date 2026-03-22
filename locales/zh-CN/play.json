@@ -14,7 +14,7 @@
 		},
 		"paletteLabel": "播放声音",
 		"placeholder": {
-			"name": "音频文件路径",
+			"name": "可选节点名称（显示名；最后路径后备）",
 			"soundPath": "绝对路径或使用上方上传按钮"
 		},
 		"upload": {

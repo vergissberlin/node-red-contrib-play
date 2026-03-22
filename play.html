@@ -25,6 +25,7 @@ RED.nodes.registerType('playa', {
 		var fileInput = $('#node-input-playa-file');
 		var uploadBtn = $('#node-input-playa-upload-btn');
 		var uploadStatus = $('#node-input-playa-upload-status');
+		var nameInput = $('#node-input-name');
 		var soundPathInput = $('#node-input-soundPath');
 		var previewAudio = document.getElementById('node-input-playa-preview-audio');
 		var previewError = $('#node-input-playa-preview-error');
@@ -155,12 +156,25 @@ RED.nodes.registerType('playa', {
 
 		setUploadStatus('idle');
 
+		function syncFieldTitles() {
+			var sp = (soundPathInput.val() || '').trim();
+			soundPathInput.attr('title', sp);
+			var nm = (nameInput.val() || '').trim();
+			nameInput.attr('title', nm);
+		}
+
+		soundPathInput.on('input change', function () {
+			syncFieldTitles();
+			refreshPreview();
+		});
+		nameInput.on('input change', syncFieldTitles);
+		syncFieldTitles();
+
 		uploadBtn.on('click', function (ev) {
 			ev.preventDefault();
 			fileInput.trigger('click');
 		});
 
-		soundPathInput.on('input change', refreshPreview);
 		if (previewAudio) {
 			previewAudio.addEventListener('error', function () {
 				if (previewAudio.src) {
@@ -208,6 +222,7 @@ RED.nodes.registerType('playa', {
 						throw new Error('Invalid response');
 					}
 					soundPathInput.val(data.path);
+					syncFieldTitles();
 					setUploadStatus('ok', data.path);
 					refreshPreview();
 				})
@@ -284,11 +299,11 @@ RED.nodes.registerType('playa', {
 <script type="text/x-red" data-template-name="playa">
 	<div class="form-row">
 		<label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="playa.label.name"></span></label>
-		<input type="text" id="node-input-name" data-i18n="[placeholder]playa.placeholder.name">
+		<input type="text" id="node-input-name" data-i18n="[placeholder]playa.placeholder.name" style="width:100%;box-sizing:border-box">
 	</div>
 	<div class="form-row">
 		<label for="node-input-soundPath"><i class="icon-music"></i> <span data-i18n="playa.label.soundPath"></span></label>
-		<input type="text" id="node-input-soundPath" data-i18n="[placeholder]playa.placeholder.soundPath">
+		<input type="text" id="node-input-soundPath" data-i18n="[placeholder]playa.placeholder.soundPath" style="width:100%;box-sizing:border-box;font-family:monospace,monospace;font-size:12px">
 	</div>
 	<div class="form-row">
 		<label style="display:block;width:100%;margin-bottom:6px;"><i class="icon-upload"></i> <span data-i18n="playa.label.upload"></span></label>
@@ -304,8 +319,8 @@ RED.nodes.registerType('playa', {
 		<div id="node-input-playa-preview-error" class="form-tips" style="display:none;margin-top:6px;color:#AD1625"></div>
 	</div>
 	<div class="form-row">
-		<label for="node-input-player"><i class="icon-tag"></i> <span data-i18n="playa.label.player"></span></label>
-		<select type="text" id="node-input-player" style="width: 320px"></select>
+		<label for="node-input-player"><i class="icon-wrench"></i> <span data-i18n="playa.label.player"></span></label>
+		<select type="text" id="node-input-player" style="width:100%;max-width:100%;box-sizing:border-box"></select>
 	</div>
 	<div class="form-row">
 		<label for="node-input-stopPrevious" style="width: 100%; display: inline-flex; align-items: center; gap: 8px;">

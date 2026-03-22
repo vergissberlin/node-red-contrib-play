@@ -14,7 +14,7 @@
 		},
 		"paletteLabel": "Ton abspielen",
 		"placeholder": {
-			"name": "Pfad zur Sounddatei",
+			"name": "Optionaler Name (Anzeige; letzter Pfad-Fallback)",
 			"soundPath": "Absoluter Pfad oder oben eine Datei hochladen"
 		},
 		"upload": {
