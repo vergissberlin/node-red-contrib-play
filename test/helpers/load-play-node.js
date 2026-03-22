@@ -15,6 +15,23 @@ const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 function loadPlayWithMock(playImpl) {
 	const registered = {};
 	const RED = {
+		settings: {
+			userDir: '/tmp/node-red-test-userdir'
+		},
+		httpAdmin: {
+			post: function post() {
+				// Upload route registration; no-op for unit tests.
+			}
+		},
+		auth: {
+			needsPermission: function needsPermission() {
+				return function noop(req, res, next) {
+					if (typeof next === 'function') {
+						next();
+					}
+				};
+			}
+		},
 		nodes: {
 			createNode(node, config) {
 				Object.setPrototypeOf(node, EventEmitter.prototype);

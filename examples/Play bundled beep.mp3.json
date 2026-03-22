@@ -1,0 +1,63 @@
+[
+  {
+    "id": "a1c2e3f4.b5d6a7c8",
+    "type": "tab",
+    "label": "Bundled beep (MP3)",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "b2d3f4a5.c6e7b8d9",
+    "type": "comment",
+    "z": "a1c2e3f4.b5d6a7c8",
+    "name": "Bundled MP3",
+    "info": "Plays examples/sounds/beep.mp3 from this package.\nThe function node builds ~/.node-red/node_modules/node-red-contrib-play/examples/sounds/beep.mp3 when that layout matches your install.\nUse a player that supports MP3 on your OS (e.g. mpg123 or mplayer on Linux, afplay on macOS, cmdmp3 on Windows).",
+    "x": 60,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "c3e4a5b6.d7f8c9e0",
+    "type": "inject",
+    "z": "a1c2e3f4.b5d6a7c8",
+    "name": "play bundled MP3",
+    "props": [{ "p": "payload" }],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "str",
+    "x": 160,
+    "y": 200,
+    "wires": [["d4f5b6c7.e8a9d0f1"]]
+  },
+  {
+    "id": "d4f5b6c7.e8a9d0f1",
+    "type": "function",
+    "z": "a1c2e3f4.b5d6a7c8",
+    "name": "path to bundled beep.mp3",
+    "func": "let home = '';\nif (typeof env !== 'undefined' && typeof env.get === 'function') {\n    home = env.get('HOME') || env.get('USERPROFILE') || '';\n}\nif (!home) {\n    node.error('Could not resolve HOME/USERPROFILE. Set msg.payload to the absolute path of examples/sounds/beep.mp3 (see examples/README.md).');\n    return null;\n}\nmsg.payload = home + '/.node-red/node_modules/node-red-contrib-play/examples/sounds/beep.mp3';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 200,
+    "wires": [["e5a6c7d8.f9b0e1a2"]]
+  },
+  {
+    "id": "e5a6c7d8.f9b0e1a2",
+    "type": "playa",
+    "z": "a1c2e3f4.b5d6a7c8",
+    "name": "",
+    "player": "mpg123",
+    "x": 640,
+    "y": 200,
+    "wires": [[]]
+  }
+]

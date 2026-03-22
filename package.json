@@ -4,7 +4,8 @@
   "description": "Output node for node-red to play sounds.",
   "main": "play.js",
   "scripts": {
-    "test": "node --test test/play.test.js"
+    "test": "node --test test/play.test.js",
+    "examples:encode-mp3": "node scripts/encode-beep-mp3.mjs"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
   },
   "homepage": "https://github.com/programmerqeu/node-red-contrib-play",
   "dependencies": {
+    "multer": "^1.4.5-lts.2",
     "play-sound": "^1.1.6"
   },
   "devDependencies": {

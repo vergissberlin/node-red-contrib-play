@@ -4,7 +4,8 @@ RED.nodes.registerType('playa', {
 	color: '#FF0000',
 	defaults: {
 		name: {value: ''},
-		player: {value: ''}
+		player: {value: ''},
+		soundPath: {value: ''}
 	},
 	inputs: 1,
 	outputs: 1,
@@ -15,6 +16,45 @@ RED.nodes.registerType('playa', {
 	},
 	paletteLabel: function () {
 		return this._('playa.paletteLabel');
+	},
+	oneditprepare: function () {
+		var fileInput = $('#node-input-playa-file');
+		fileInput.on('change', function (e) {
+			var file = e.target.files && e.target.files[0];
+			if (!file) {
+				return;
+			}
+			var formData = new FormData();
+			formData.append('file', file);
+			var base = RED.httpAdminRoot || '';
+			if (base.slice(-1) !== '/') {
+				base += '/';
+			}
+			fetch(base + 'contrib-playa/upload', {
+				method: 'POST',
+				body: formData,
+				credentials: 'include',
+				headers: {'X-CSRF-Token': RED.settings.csrfToken}
+			})
+				.then(function (res) {
+					return res.json().then(function (data) {
+						if (!res.ok) {
+							throw new Error(data.error || res.statusText || 'Upload failed');
+						}
+						return data;
+					});
+				})
+				.then(function (data) {
+					$('#node-input-soundPath').val(data.path);
+					RED.notify(RED._('playa.notify.uploadSuccess'), 'success');
+				})
+				.catch(function (err) {
+					RED.notify(err.message || RED._('playa.notify.uploadFail'), 'error');
+				})
+				.finally(function () {
+					fileInput.val('');
+				});
+		});
 	}
 });
 </script>
@@ -23,6 +63,14 @@ RED.nodes.registerType('playa', {
 	<div class="form-row">
 		<label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="playa.label.name"></span></label>
 		<input type="text" id="node-input-name" data-i18n="[placeholder]playa.placeholder.name">
+	</div>
+	<div class="form-row">
+		<label for="node-input-soundPath"><i class="icon-music"></i> <span data-i18n="playa.label.soundPath"></span></label>
+		<input type="text" id="node-input-soundPath" data-i18n="[placeholder]playa.placeholder.soundPath">
+	</div>
+	<div class="form-row">
+		<label for="node-input-playa-file"><i class="icon-upload"></i> <span data-i18n="playa.label.upload"></span></label>
+		<input type="file" id="node-input-playa-file" accept=".wav,.mp3,.ogg,.flac,.m4a,.aac,audio/*">
 	</div>
 	<div class="form-row">
 		<label for="node-input-player"><i class="icon-tag"></i> <span data-i18n="playa.label.player"></span></label>

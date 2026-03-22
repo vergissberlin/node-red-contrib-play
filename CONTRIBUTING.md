@@ -26,6 +26,14 @@ pnpm test
 
 Run this after changes to `play.js`, `play.html`, or tests under `test/`.
 
+## Bundled example audio
+
+`examples/sounds/beep.wav` is generated in-repo; `beep.mp3` is produced from it with **LAME** (`lame` on your `PATH`). To regenerate the MP3 after editing the WAV:
+
+```bash
+pnpm run examples:encode-mp3
+```
+
 ## Use the node in a local Node-RED
 
 Node-RED loads nodes from its **user directory** (`userDir`), not from your git clone, unless you connect them. Two common approaches:

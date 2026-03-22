@@ -62,7 +62,8 @@ The node **always sends the incoming message** to the output after starting play
 Ready-made flows are in the package (see **`examples/README.md`**):
 
 - **`examples/Play sound from payload.json`** — set **payload** to an audio file path.
-- **`examples/Play bundled beep.wav.json`** — uses the bundled sample **`examples/sounds/beep.wav`** when your install path matches the default layout.
+- **`examples/Play bundled beep.wav.json`** / **`Play bundled beep.mp3.json`** — bundled samples **`examples/sounds/beep.wav`** and **`beep.mp3`** (when the default install layout matches).
+- **`examples/Play bundled beep compare wav and mp3.json`** — try **WAV** and **MP3** side by side.
 
 Import via **Menu → Import** in the Node-RED editor.
 

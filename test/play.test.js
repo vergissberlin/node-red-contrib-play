@@ -48,6 +48,22 @@ describe('playa node', () => {
 		assert.strictEqual(node._sent.payload, undefined);
 	});
 
+	it('prefers soundPath over node name when payload is missing', () => {
+		let playedPath;
+		const playImpl = (path) => {
+			playedPath = path;
+			return { kill: () => {} };
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({
+			name: 'fallback-label',
+			soundPath: '/data/uploads/beep.wav',
+			id: 'n-soundpath'
+		});
+		node.emit('input', {});
+		assert.strictEqual(playedPath, '/data/uploads/beep.wav');
+	});
+
 	it('uses node name when payload is empty string (falsy)', () => {
 		let playedPath;
 		const playImpl = (path) => {
