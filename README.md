@@ -7,7 +7,7 @@
 
 ## What it does
 
-The **playa** node receives a message, asks the underlying [`play-sound`](https://www.npmjs.com/package/play-sound) helper to start playback for a file path, then forwards the same message to its output. Playback errors are reported on the node (via `node.error`).
+The **playa** node receives a message, asks the underlying [`play-sound`](https://www.npmjs.com/package/play-sound) helper to start playback for a file path, then forwards the same message to its output (by default **right after playback starts**). Optionally you can send the message **after the player exits**, and you can **stop the previous playback** when a new message arrives. Playback errors are reported on the node (via `node.error`).
 
 ## Requirements
 
@@ -45,8 +45,10 @@ sudo apt-get install sox libsox-fmt-all
 | Property      | Role                                                                                                                                 |
 |---------------|--------------------------------------------------------------------------------------------------------------------------------------|
 | `msg.payload` | Path to the sound file (string). If missing or empty, the node uses **Sound file path** from the node, then **Name**, as the path. |
+| Output timing | Controlled by **Send output when playback finishes**: off = send after playback **starts** (default); on = send after the player **exits** successfully. |
+| Overlap       | **Stop previous playback** (default on) ends the last player process before starting the next file; turn off to allow overlapping sounds. |
 
-The node **always sends the incoming message** to the output after starting playback (same object reference as in the tests). Connect downstream nodes if you need to chain logic after a play request.
+By default the node **sends the incoming message** to the output right after playback **starts** (same object reference). If **Send output when playback finishes** is enabled, the message is sent after the player process **exits successfully** instead. Connect downstream nodes if you need to chain logic after a play request or after playback ends.
 
 ### Editor fields
 
@@ -54,6 +56,8 @@ The node **always sends the incoming message** to the output after starting play
 - **Sound file path:** Optional absolute path on the Node-RED host. You can type it or set it by choosing **Upload sound file** (files are stored under `node-red-contrib-play/uploads` inside your Node-RED user directory, with a generated filename). Allowed extensions: `.wav`, `.mp3`, `.ogg`, `.flac`, `.m4a`, `.aac`; maximum size **10 MB** per upload. Exported flows do **not** include uploaded binaries—copy or back up that folder if you move instances.
 - **Preview:** The dialog includes a small browser **Preview** player that streams the file through the Node-RED admin HTTP API only when the resolved path stays **inside your Node-RED user directory** (same extensions as uploads); paths elsewhere on the host cannot be previewed in the editor.
 - **Player:** The dropdown is filled from the **Node-RED server** (not the browser): it lists CLI players that match the server OS and, when possible, that are found on `PATH`. Choose **Automatic** to let `play-sound` pick the first available binary in that order. A value saved from another machine/OS may still appear as an extra option so the flow stays editable.
+- **Stop previous playback:** When enabled (default), starting a new sound stops the still-running player from the previous input. Disable to allow overlapping playback from rapid triggers.
+- **Send output when playback finishes:** When enabled, `msg` is sent after the player exits successfully; when disabled (default), `msg` is sent immediately after the play process is spawned (legacy behaviour).
 
 ### Example flow
 

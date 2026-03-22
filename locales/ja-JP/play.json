@@ -7,6 +7,8 @@
 			"soundPath": "音声ファイルのパス",
 			"upload": "音声ファイルをアップロード",
 			"preview": "プレビュー",
+			"stopPrevious": "Stop previous playback",
+			"sendOnEnd": "Send output when playback finishes",
 			"node": "playa"
 		},
 		"paletteLabel": "音声を再生",

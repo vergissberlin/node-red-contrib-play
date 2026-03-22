@@ -216,6 +216,8 @@ module.exports = function(RED) {
 		var node = this;
 		var soundPath = config.soundPath != null ? config.soundPath : '';
 		var playerName = (config.player != null && String(config.player).trim()) || '';
+		var stopPrevious = config.stopPrevious !== false;
+		var sendOnEnd = config.sendOnEnd === true;
 		var playerOpts = {};
 		if (playerName) {
 			playerOpts.player = playerName;
@@ -224,24 +226,71 @@ module.exports = function(RED) {
 		}
 		var audioPlayer = createPlaySound(playerOpts);
 
-		node.on('close', function() {
+		var currentChild = null;
+		var currentToken = null;
+
+		node.on('close', function(done) {
+			if (currentToken) {
+				currentToken.cancelled = true;
+			}
+			if (currentChild) {
+				try {
+					currentChild.kill();
+				} catch (e) {
+					// ignore
+				}
+				currentChild = null;
+			}
 			node.status({});
+			if (typeof done === 'function') {
+				done();
+			}
 		});
 
 		this.on('input', function(msg) {
 			var pathToPlay = msg.payload || soundPath || this.name;
 			node.status({ fill: 'blue', shape: 'dot' });
-			var audio = audioPlayer.play(
-				pathToPlay,
-				function(err) {
-					if (err) {
-						node.status({ fill: 'red', shape: 'dot', text: formatStatusError(err) });
-						return node.error(err);
-					}
+
+			if (stopPrevious && currentChild) {
+				if (currentToken) {
+					currentToken.cancelled = true;
+				}
+				try {
+					currentChild.kill();
+				} catch (e) {
+					// ignore
+				}
+				currentChild = null;
+			}
+
+			currentToken = { cancelled: false };
+			var token = currentToken;
+
+			var audio = audioPlayer.play(pathToPlay, function(err) {
+				if (token.cancelled) {
 					node.status({});
-				});
-			audio.kill();
-			node.send(msg);
+					return;
+				}
+				currentChild = null;
+				if (err) {
+					node.status({ fill: 'red', shape: 'dot', text: formatStatusError(err) });
+					return node.error(err);
+				}
+				node.status({});
+				if (sendOnEnd) {
+					node.send(msg);
+				}
+			});
+
+			if (!audio) {
+				currentToken = null;
+				return;
+			}
+			currentChild = audio;
+
+			if (!sendOnEnd) {
+				node.send(msg);
+			}
 		});
 	}
 

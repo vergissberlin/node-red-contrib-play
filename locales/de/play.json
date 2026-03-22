@@ -7,6 +7,8 @@
 			"soundPath": "Pfad zur Sounddatei",
 			"upload": "Sounddatei hochladen",
 			"preview": "Vorschau",
+			"stopPrevious": "Vorherige Wiedergabe stoppen",
+			"sendOnEnd": "Ausgabe nach Ende der Wiedergabe senden",
 			"node": "playa"
 		},
 		"paletteLabel": "Ton abspielen",

@@ -7,6 +7,8 @@
 			"soundPath": "Ruta del archivo de audio",
 			"upload": "Subir archivo de audio",
 			"preview": "Vista previa",
+			"stopPrevious": "Detener reproducción anterior",
+			"sendOnEnd": "Enviar salida al terminar la reproducción",
 			"node": "playa"
 		},
 		"paletteLabel": "reproducir sonido",

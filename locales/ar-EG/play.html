@@ -1,4 +1,7 @@
 <script type="text/x-red" data-help-name="playa">
 <p>يشغّل ملف صوتي عبر مشغّل سطر الأوامر على الجهاز الذي يعمل عليه Node-RED.</p>
-<p>ترتيب مسار التشغيل: <code>msg.payload</code> إن لم يكن فارغًا، ثم <b>مسار ملف الصوت</b> (يدويًا أو بعد الرفع)، ثم <b>الاسم</b>. <b>الاسم</b> هو أيضًا تسمية العقدة. تُخزَّن الملفات المرفوعة ضمن دليل مستخدم Node-RED في <code>node-red-contrib-play/uploads</code> (بحد أقصى 10&nbsp;ميجابايت؛ الامتدادات: wav، mp3، ogg، flac، m4a، aac). لا تتضمّن تصديرات التدفق هذه الملفات الثنائية. اختر <b>المشغّل</b> لأداة سطر الأوامر (مثل <code>afplay</code> على macOS و<code>aplay</code> على كثير من أنظمة Linux).</p>
+<p>ترتيب مسار التشغيل: <code>msg.payload</code> إن لم يكن فارغًا، ثم <b>مسار ملف الصوت</b> (يدويًا أو بعد الرفع)، ثم <b>الاسم</b>. <b>الاسم</b> هو أيضًا تسمية العقدة. تُخزَّن الملفات المرفوعة ضمن دليل مستخدم Node-RED في <code>node-red-contrib-play/uploads</code> (بحد أقصى 10&nbsp;ميجابايت؛ الامتدادات: wav، mp3، ogg، flac، m4a، aac). لا تتضمّن تصديرات التدفق هذه الملفات الثنائية.</p>
+<p lang="en"><b>Stop previous playback</b> (default on): before starting a new file, the node stops the still-running player process from the last trigger. Turn off to allow overlapping sounds.</p>
+<p lang="en"><b>Send output when playback finishes</b> (default off): when enabled, the message is sent after the player exits successfully; when off, the message is sent right after playback starts (same as earlier versions).</p>
+<p>اختر <b>المشغّل</b> لأداة سطر الأوامر (مثل <code>afplay</code> على macOS و<code>aplay</code> على كثير من أنظمة Linux).</p>
 </script>

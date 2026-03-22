@@ -7,6 +7,8 @@
 			"soundPath": "مسار ملف الصوت",
 			"upload": "رفع ملف صوتي",
 			"preview": "معاينة",
+			"stopPrevious": "Stop previous playback",
+			"sendOnEnd": "Send output when playback finishes",
 			"node": "playa"
 		},
 		"paletteLabel": "تشغيل الصوت",

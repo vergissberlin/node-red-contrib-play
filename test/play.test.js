@@ -11,7 +11,7 @@ describe('playa node', () => {
 		assert.strictEqual(typeof RED._registered.playa, 'function');
 	});
 
-	it('calls play with msg.payload, invokes kill, and sends the same message', async () => {
+	it('calls play with msg.payload, sends immediately, and does not kill the new playback', async () => {
 		const events = [];
 		const playImpl = (path, cb) => {
 			events.push({ op: 'play', path, cb });
@@ -27,13 +27,12 @@ describe('playa node', () => {
 		const msg = { payload: '/tmp/beep.wav' };
 		node.emit('input', msg);
 
-		assert.strictEqual(events.length, 2);
+		assert.strictEqual(events.length, 1);
 		assert.deepStrictEqual(events[0], {
 			op: 'play',
 			path: '/tmp/beep.wav',
 			cb: events[0].cb
 		});
-		assert.deepStrictEqual(events[1], { op: 'kill', path: '/tmp/beep.wav' });
 		assert.strictEqual(node._sent, msg);
 		assert.strictEqual(node._err, undefined);
 		assert.deepStrictEqual(node._statusLog, [{ fill: 'blue', shape: 'dot' }]);
@@ -42,6 +41,71 @@ describe('playa node', () => {
 			{ fill: 'blue', shape: 'dot' },
 			{}
 		]);
+	});
+
+	it('kills previous playback when stopPrevious is true and a new message arrives', () => {
+		const events = [];
+		const playImpl = (path, cb) => {
+			events.push({ op: 'play', path });
+			setImmediate(() => cb(null));
+			return {
+				kill: () => events.push({ op: 'kill', path })
+			};
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({ name: 'x', id: 'n-overlap', stopPrevious: true });
+		node.emit('input', { payload: '/a.wav' });
+		node.emit('input', { payload: '/b.wav' });
+		assert.deepStrictEqual(events, [
+			{ op: 'play', path: '/a.wav' },
+			{ op: 'kill', path: '/a.wav' },
+			{ op: 'play', path: '/b.wav' }
+		]);
+	});
+
+	it('does not kill previous playback when stopPrevious is false', () => {
+		const events = [];
+		const playImpl = (path, cb) => {
+			events.push({ op: 'play', path });
+			setImmediate(() => cb(null));
+			return {
+				kill: () => events.push({ op: 'kill', path })
+			};
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({ name: 'x', id: 'n-no-stop', stopPrevious: false });
+		node.emit('input', { payload: '/a.wav' });
+		node.emit('input', { payload: '/b.wav' });
+		assert.deepStrictEqual(events, [
+			{ op: 'play', path: '/a.wav' },
+			{ op: 'play', path: '/b.wav' }
+		]);
+	});
+
+	it('defers send until playback ends when sendOnEnd is true', async () => {
+		const playImpl = (path, cb) => {
+			setImmediate(() => cb(null));
+			return { kill: () => {} };
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({ name: 'a', id: 'n-send-end', sendOnEnd: true });
+		const msg = { payload: '/x.wav' };
+		node.emit('input', msg);
+		assert.strictEqual(node._sent, undefined);
+		await new Promise((r) => setImmediate(r));
+		assert.strictEqual(node._sent, msg);
+	});
+
+	it('does not send when sendOnEnd is true and play fails synchronously', () => {
+		const playImpl = (path, cb) => {
+			cb(new Error('fail'));
+			return { kill: () => {} };
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({ name: 'x', id: 'n-no-send-err', sendOnEnd: true });
+		node.emit('input', { payload: '/x.wav' });
+		assert.strictEqual(node._sent, undefined);
+		assert.ok(node._err instanceof Error);
 	});
 
 	it('uses configured node name when payload is missing', () => {

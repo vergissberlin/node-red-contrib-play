@@ -7,6 +7,8 @@
 			"soundPath": "साउंड फ़ाइल का पथ",
 			"upload": "साउंड फ़ाइल अपलोड करें",
 			"preview": "पूर्वावलोकन",
+			"stopPrevious": "Stop previous playback",
+			"sendOnEnd": "Send output when playback finishes",
 			"node": "playa"
 		},
 		"paletteLabel": "ध्वनि चलाएँ",

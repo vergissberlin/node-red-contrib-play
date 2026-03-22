@@ -1,4 +1,7 @@
 <script type="text/x-red" data-help-name="playa">
 <p>Plays an audio file using a command-line player on the host where Node-RED runs.</p>
-<p>Playback path order: <code>msg.payload</code> (if non-empty), then <b>Sound file path</b> (typed or set by upload), then <b>Name</b>. <b>Name</b> is also the node label. Uploads are stored under your Node-RED user directory in <code>node-red-contrib-play/uploads</code> (max. 10&nbsp;MB; extensions: wav, mp3, ogg, flac, m4a, aac). Flow exports do not include those binary files—back up that folder if needed. Select <b>Player</b> for the CLI (for example <code>afplay</code> on macOS, <code>aplay</code> on many Linux systems).</p>
+<p>Playback path order: <code>msg.payload</code> (if non-empty), then <b>Sound file path</b> (typed or set by upload), then <b>Name</b>. <b>Name</b> is also the node label. Uploads are stored under your Node-RED user directory in <code>node-red-contrib-play/uploads</code> (max. 10&nbsp;MB; extensions: wav, mp3, ogg, flac, m4a, aac). Flow exports do not include those binary files—back up that folder if needed.</p>
+<p><b>Stop previous playback</b> (default on): before starting a new file, the node stops the still-running player process from the last trigger. Turn off to allow overlapping sounds.</p>
+<p><b>Send output when playback finishes</b> (default off): when enabled, the message is sent after the player exits successfully; when off, the message is sent right after playback starts (same as earlier versions).</p>
+<p>Select <b>Player</b> for the CLI (for example <code>afplay</code> on macOS, <code>aplay</code> on many Linux systems).</p>
 </script>
