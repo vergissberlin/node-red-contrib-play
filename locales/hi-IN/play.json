@@ -6,6 +6,7 @@
 			"playerAuto": "स्वचालित",
 			"soundPath": "साउंड फ़ाइल का पथ",
 			"upload": "साउंड फ़ाइल अपलोड करें",
+			"uploadButton": "Choose file & upload",
 			"preview": "पूर्वावलोकन",
 			"stopPrevious": "Stop previous playback",
 			"sendOnEnd": "Send output when playback finishes",
@@ -14,7 +15,12 @@
 		"paletteLabel": "ध्वनि चलाएँ",
 		"placeholder": {
 			"name": "साउंड फ़ाइल का पथ",
-			"soundPath": "पूर्ण पथ या नीचे फ़ाइल अपलोड करें"
+			"soundPath": "पूर्ण पथ या ऊपर अपलोड बटन का उपयोग करें"
+		},
+		"upload": {
+			"uploading": "Uploading…",
+			"success": "Saved. Path:",
+			"failed": "Upload failed."
 		},
 		"notify": {
 			"uploadSuccess": "फ़ाइल अपलोड हो गई",

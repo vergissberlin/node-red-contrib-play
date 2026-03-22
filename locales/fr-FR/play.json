@@ -6,6 +6,7 @@
 			"playerAuto": "Automatique",
 			"soundPath": "Chemin du fichier audio",
 			"upload": "Téléverser un fichier audio",
+			"uploadButton": "Choisir un fichier et téléverser",
 			"preview": "Aperçu",
 			"stopPrevious": "Arrêter la lecture précédente",
 			"sendOnEnd": "Envoyer la sortie à la fin de la lecture",
@@ -14,7 +15,12 @@
 		"paletteLabel": "lire un son",
 		"placeholder": {
 			"name": "Chemin du fichier audio",
-			"soundPath": "Chemin absolu ou téléversement ci-dessous"
+			"soundPath": "Chemin absolu ou bouton de téléversement ci-dessus"
+		},
+		"upload": {
+			"uploading": "Téléversement…",
+			"success": "Enregistré. Chemin :",
+			"failed": "Échec du téléversement."
 		},
 		"notify": {
 			"uploadSuccess": "Fichier téléversé",

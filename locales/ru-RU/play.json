@@ -6,6 +6,7 @@
 			"playerAuto": "Автоматически",
 			"soundPath": "Путь к аудиофайлу",
 			"upload": "Загрузить аудиофайл",
+			"uploadButton": "Выбрать файл и загрузить",
 			"preview": "Предпросмотр",
 			"stopPrevious": "Stop previous playback",
 			"sendOnEnd": "Send output when playback finishes",
@@ -14,7 +15,12 @@
 		"paletteLabel": "воспроизвести звук",
 		"placeholder": {
 			"name": "Путь к аудиофайлу",
-			"soundPath": "Абсолютный путь или загрузите файл ниже"
+			"soundPath": "Абсолютный путь или кнопка загрузки выше"
+		},
+		"upload": {
+			"uploading": "Загрузка…",
+			"success": "Сохранено. Путь:",
+			"failed": "Ошибка загрузки."
 		},
 		"notify": {
 			"uploadSuccess": "Файл загружен",

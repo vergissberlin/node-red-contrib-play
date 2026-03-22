@@ -6,6 +6,7 @@
 			"playerAuto": "Automatisch",
 			"soundPath": "Pfad zur Sounddatei",
 			"upload": "Sounddatei hochladen",
+			"uploadButton": "Datei wählen & hochladen",
 			"preview": "Vorschau",
 			"stopPrevious": "Vorherige Wiedergabe stoppen",
 			"sendOnEnd": "Ausgabe nach Ende der Wiedergabe senden",
@@ -14,7 +15,12 @@
 		"paletteLabel": "Ton abspielen",
 		"placeholder": {
 			"name": "Pfad zur Sounddatei",
-			"soundPath": "Absoluter Pfad oder unten eine Datei hochladen"
+			"soundPath": "Absoluter Pfad oder oben eine Datei hochladen"
+		},
+		"upload": {
+			"uploading": "Wird hochgeladen…",
+			"success": "Gespeichert. Pfad:",
+			"failed": "Upload fehlgeschlagen."
 		},
 		"notify": {
 			"uploadSuccess": "Datei hochgeladen",

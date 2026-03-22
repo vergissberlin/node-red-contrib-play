@@ -6,6 +6,7 @@
 			"playerAuto": "自動",
 			"soundPath": "音声ファイルのパス",
 			"upload": "音声ファイルをアップロード",
+			"uploadButton": "ファイルを選んでアップロード",
 			"preview": "プレビュー",
 			"stopPrevious": "Stop previous playback",
 			"sendOnEnd": "Send output when playback finishes",
@@ -14,7 +15,12 @@
 		"paletteLabel": "音声を再生",
 		"placeholder": {
 			"name": "音声ファイルのパス",
-			"soundPath": "絶対パス、または下でファイルをアップロード"
+			"soundPath": "絶対パス、または上のボタンでアップロード"
+		},
+		"upload": {
+			"uploading": "アップロード中…",
+			"success": "保存しました。パス:",
+			"failed": "アップロードに失敗しました。"
 		},
 		"notify": {
 			"uploadSuccess": "ファイルをアップロードしました",

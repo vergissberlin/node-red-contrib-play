@@ -6,6 +6,7 @@
 			"playerAuto": "Automático",
 			"soundPath": "Ruta del archivo de audio",
 			"upload": "Subir archivo de audio",
+			"uploadButton": "Elegir archivo y subir",
 			"preview": "Vista previa",
 			"stopPrevious": "Detener reproducción anterior",
 			"sendOnEnd": "Enviar salida al terminar la reproducción",
@@ -14,7 +15,12 @@
 		"paletteLabel": "reproducir sonido",
 		"placeholder": {
 			"name": "Ruta del archivo de audio",
-			"soundPath": "Ruta absoluta o suba un archivo abajo"
+			"soundPath": "Ruta absoluta o use el botón de subida arriba"
+		},
+		"upload": {
+			"uploading": "Subiendo…",
+			"success": "Guardado. Ruta:",
+			"failed": "Error al subir."
 		},
 		"notify": {
 			"uploadSuccess": "Archivo subido",

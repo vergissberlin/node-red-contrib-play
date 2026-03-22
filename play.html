@@ -22,6 +22,8 @@ RED.nodes.registerType('playa', {
 	},
 	oneditprepare: function () {
 		var fileInput = $('#node-input-playa-file');
+		var uploadBtn = $('#node-input-playa-upload-btn');
+		var uploadStatus = $('#node-input-playa-upload-status');
 		var soundPathInput = $('#node-input-soundPath');
 		var previewAudio = document.getElementById('node-input-playa-preview-audio');
 		var previewError = $('#node-input-playa-preview-error');
@@ -126,6 +128,37 @@ RED.nodes.registerType('playa', {
 			}, 250);
 		}
 
+		function setUploadStatus(state, detail) {
+			uploadBtn.prop('disabled', state === 'uploading');
+			uploadStatus.removeClass('playa-upload-ok playa-upload-err');
+			uploadStatus.css({ color: '', display: '' });
+			if (state === 'idle') {
+				uploadStatus.text('').hide();
+				return;
+			}
+			uploadStatus.show();
+			if (state === 'uploading') {
+				uploadStatus.css('color', '#888').text(RED._('playa.upload.uploading'));
+			} else if (state === 'ok') {
+				uploadStatus.addClass('playa-upload-ok').css('color', '#2e7d32');
+				var line = RED._('playa.upload.success');
+				if (detail) {
+					line += ' ' + detail;
+				}
+				uploadStatus.text(line);
+			} else {
+				uploadStatus.addClass('playa-upload-err').css('color', '#AD1625');
+				uploadStatus.text(RED._('playa.upload.failed') + ' ' + (detail || ''));
+			}
+		}
+
+		setUploadStatus('idle');
+
+		uploadBtn.on('click', function (ev) {
+			ev.preventDefault();
+			fileInput.trigger('click');
+		});
+
 		soundPathInput.on('input change', refreshPreview);
 		if (previewAudio) {
 			previewAudio.addEventListener('error', function () {
@@ -140,32 +173,50 @@ RED.nodes.registerType('playa', {
 			if (!file) {
 				return;
 			}
+			setUploadStatus('uploading');
 			var formData = new FormData();
 			formData.append('file', file);
+			var headers = { Accept: 'application/json' };
+			if (RED.settings && RED.settings.csrfToken) {
+				headers['X-CSRF-Token'] = RED.settings.csrfToken;
+			}
 			fetch(base + 'contrib-playa/upload', {
 				method: 'POST',
 				body: formData,
 				credentials: 'include',
-				headers: {'X-CSRF-Token': RED.settings.csrfToken}
+				headers: headers
 			})
 				.then(function (res) {
-					return res.json().then(function (data) {
+					return res.text().then(function (text) {
+						var data = {};
+						if (text) {
+							try {
+								data = JSON.parse(text);
+							} catch (parseErr) {
+								data = { error: text.slice(0, 300) || res.statusText };
+							}
+						}
 						if (!res.ok) {
-							throw new Error(data.error || res.statusText || 'Upload failed');
+							throw new Error((data && data.error) || res.statusText || 'Upload failed');
 						}
 						return data;
 					});
 				})
 				.then(function (data) {
+					if (!data || !data.path) {
+						throw new Error('Invalid response');
+					}
 					soundPathInput.val(data.path);
-					RED.notify(RED._('playa.notify.uploadSuccess'), 'success');
+					setUploadStatus('ok', data.path);
 					refreshPreview();
 				})
 				.catch(function (err) {
-					RED.notify(err.message || RED._('playa.notify.uploadFail'), 'error');
+					var msg = err && err.message ? err.message : String(err);
+					setUploadStatus('error', msg);
 				})
 				.finally(function () {
 					fileInput.val('');
+					uploadBtn.prop('disabled', false);
 				});
 		});
 
@@ -196,13 +247,17 @@ RED.nodes.registerType('playa', {
 		<input type="text" id="node-input-soundPath" data-i18n="[placeholder]playa.placeholder.soundPath">
 	</div>
 	<div class="form-row">
+		<label style="display:block;width:100%;margin-bottom:6px;"><i class="icon-upload"></i> <span data-i18n="playa.label.upload"></span></label>
+		<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px;max-width:100%;">
+			<button type="button" id="node-input-playa-upload-btn" class="editor-button" data-i18n="playa.label.uploadButton"></button>
+			<input type="file" id="node-input-playa-file" accept=".wav,.mp3,.ogg,.flac,.m4a,.aac,audio/*" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" tabindex="-1" aria-hidden="true">
+			<div id="node-input-playa-upload-status" class="form-tips" style="display:none;flex:1;min-width:180px;max-width:100%;line-height:1.35;margin:0;"></div>
+		</div>
+	</div>
+	<div class="form-row">
 		<label for="node-input-playa-preview-audio"><i class="icon-volume-up"></i> <span data-i18n="playa.label.preview"></span></label>
 		<audio id="node-input-playa-preview-audio" controls preload="none" style="display:block;max-width:100%;width:min(400px,100%);height:36px"></audio>
 		<div id="node-input-playa-preview-error" class="form-tips" style="display:none;margin-top:6px;color:#AD1625"></div>
-	</div>
-	<div class="form-row">
-		<label for="node-input-playa-file"><i class="icon-upload"></i> <span data-i18n="playa.label.upload"></span></label>
-		<input type="file" id="node-input-playa-file" accept=".wav,.mp3,.ogg,.flac,.m4a,.aac,audio/*">
 	</div>
 	<div class="form-row">
 		<label for="node-input-player"><i class="icon-tag"></i> <span data-i18n="playa.label.player"></span></label>
@@ -224,7 +279,7 @@ RED.nodes.registerType('playa', {
 
 <script type="text/x-red" data-help-name="playa">
 <p>Plays an audio file using a command-line player on the host where Node-RED runs.</p>
-<p>Playback path order: <code>msg.payload</code> (if non-empty), then <b>Sound file path</b> (typed or set by upload), then <b>Name</b>. <b>Name</b> is also the node label. Uploads are stored under your Node-RED user directory in <code>node-red-contrib-play/uploads</code> (max. 10&nbsp;MB; extensions: wav, mp3, ogg, flac, m4a, aac). Flow exports do not include those binary files—back up that folder if needed.</p>
+<p>Playback path order: <code>msg.payload</code> (if non-empty), then <b>Sound file path</b> (typed or set by upload), then <b>Name</b>. <b>Name</b> is also the node label. Use <b>Choose file &amp; upload</b> for a visible upload control; status text shows progress and the saved path or an error. Uploads are stored under your Node-RED user directory in <code>node-red-contrib-play/uploads</code> (max. 10&nbsp;MB; extensions: wav, mp3, ogg, flac, m4a, aac). Flow exports do not include those binary files—back up that folder if needed.</p>
 <p><b>Stop previous playback</b> (default on): before starting a new file, the node stops the still-running player process from the last trigger. Turn off to allow overlapping sounds.</p>
 <p><b>Send output when playback finishes</b> (default off): when enabled, the message is sent after the player exits successfully; when off, the message is sent right after playback starts (same as earlier versions).</p>
 <p>Select <b>Player</b> for the CLI (for example <code>afplay</code> on macOS, <code>aplay</code> on many Linux systems).</p>

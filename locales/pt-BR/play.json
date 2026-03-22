@@ -6,6 +6,7 @@
 			"playerAuto": "Automático",
 			"soundPath": "Caminho do arquivo de áudio",
 			"upload": "Enviar arquivo de áudio",
+			"uploadButton": "Escolher arquivo e enviar",
 			"preview": "Pré-visualização",
 			"stopPrevious": "Parar reprodução anterior",
 			"sendOnEnd": "Enviar saída ao terminar a reprodução",
@@ -14,7 +15,12 @@
 		"paletteLabel": "reproduzir som",
 		"placeholder": {
 			"name": "Caminho do arquivo de áudio",
-			"soundPath": "Caminho absoluto ou envie um arquivo abaixo"
+			"soundPath": "Caminho absoluto ou use o botão de envio acima"
+		},
+		"upload": {
+			"uploading": "Enviando…",
+			"success": "Salvo. Caminho:",
+			"failed": "Falha no envio."
 		},
 		"notify": {
 			"uploadSuccess": "Arquivo enviado",

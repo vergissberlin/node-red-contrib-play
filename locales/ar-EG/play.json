@@ -6,6 +6,7 @@
 			"playerAuto": "تلقائي",
 			"soundPath": "مسار ملف الصوت",
 			"upload": "رفع ملف صوتي",
+			"uploadButton": "Choose file & upload",
 			"preview": "معاينة",
 			"stopPrevious": "Stop previous playback",
 			"sendOnEnd": "Send output when playback finishes",
@@ -14,7 +15,12 @@
 		"paletteLabel": "تشغيل الصوت",
 		"placeholder": {
 			"name": "مسار ملف الصوت",
-			"soundPath": "مسار مطلق أو ارفع ملفًا أدناه"
+			"soundPath": "مسار مطلق أو استخدم زر الرفع أعلاه"
+		},
+		"upload": {
+			"uploading": "Uploading…",
+			"success": "Saved. Path:",
+			"failed": "Upload failed."
 		},
 		"notify": {
 			"uploadSuccess": "تم رفع الملف",

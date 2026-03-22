@@ -6,6 +6,7 @@
 			"playerAuto": "自动",
 			"soundPath": "音频文件路径",
 			"upload": "上传音频文件",
+			"uploadButton": "选择文件并上传",
 			"preview": "预览",
 			"stopPrevious": "Stop previous playback",
 			"sendOnEnd": "Send output when playback finishes",
@@ -14,7 +15,12 @@
 		"paletteLabel": "播放声音",
 		"placeholder": {
 			"name": "音频文件路径",
-			"soundPath": "绝对路径或在下方上传文件"
+			"soundPath": "绝对路径或使用上方上传按钮"
+		},
+		"upload": {
+			"uploading": "正在上传…",
+			"success": "已保存。路径：",
+			"failed": "上传失败。"
 		},
 		"notify": {
 			"uploadSuccess": "文件已上传",

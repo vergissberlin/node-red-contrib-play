@@ -6,6 +6,7 @@
 			"playerAuto": "Automatic",
 			"soundPath": "Sound file path",
 			"upload": "Upload sound file",
+			"uploadButton": "Choose file & upload",
 			"preview": "Preview",
 			"stopPrevious": "Stop previous playback",
 			"sendOnEnd": "Send output when playback finishes",
@@ -14,7 +15,12 @@
 		"paletteLabel": "play sound",
 		"placeholder": {
 			"name": "Path to sound file",
-			"soundPath": "Absolute path or upload a file below"
+			"soundPath": "Absolute path or use the upload button above"
+		},
+		"upload": {
+			"uploading": "Uploading…",
+			"success": "Saved. Path:",
+			"failed": "Upload failed."
 		},
 		"notify": {
 			"uploadSuccess": "File uploaded",
