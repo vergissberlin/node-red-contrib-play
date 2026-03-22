@@ -18,6 +18,7 @@ module.exports = function(RED) {
 	var fs = require('fs');
 	var path = require('path');
 	var multer = require('multer');
+	var parseFile = require('music-metadata').parseFile;
 
 	var createPlaySound = require('play-sound');
 	var ap = require('./lib/available-players.js');
@@ -211,6 +212,20 @@ module.exports = function(RED) {
 	}
 
 	/**
+	 * @param {number} totalSeconds
+	 * @returns {string} m:ss (floor seconds)
+	 */
+	function formatMmSs(totalSeconds) {
+		if (!Number.isFinite(totalSeconds) || totalSeconds < 0) {
+			return '0:00';
+		}
+		var sec = Math.floor(totalSeconds);
+		var m = Math.floor(sec / 60);
+		var s = sec % 60;
+		return m + ':' + (s < 10 ? '0' : '') + s;
+	}
+
+	/**
 	 * @param {*} err play-sound passes exit code from `close` or an Error from spawn
 	 * @param {{ path?: string, player?: string }} [ctx]
 	 */
@@ -274,6 +289,10 @@ module.exports = function(RED) {
 		node.on('close', function(done) {
 			if (currentToken) {
 				currentToken.cancelled = true;
+				if (currentToken.statusInterval) {
+					clearInterval(currentToken.statusInterval);
+					currentToken.statusInterval = null;
+				}
 			}
 			if (currentChild) {
 				try {
@@ -298,26 +317,39 @@ module.exports = function(RED) {
 				return;
 			}
 			var pathToPlay = resolvedPath.path;
+			var isHttp = /^https?:\/\//i.test(pathToPlay);
+
+			if (stopPrevious) {
+				if (currentToken) {
+					currentToken.cancelled = true;
+					if (currentToken.statusInterval) {
+						clearInterval(currentToken.statusInterval);
+						currentToken.statusInterval = null;
+					}
+				}
+				if (currentChild) {
+					try {
+						currentChild.kill();
+					} catch (e) {
+						// ignore
+					}
+					currentChild = null;
+				}
+			}
+
+			currentToken = { cancelled: false, statusInterval: null };
+			var token = currentToken;
+			var endHandled = false;
+			var playbackEnded = false;
 
 			node.status({ fill: 'blue', shape: 'dot' });
 
-			if (stopPrevious && currentChild) {
-				if (currentToken) {
-					currentToken.cancelled = true;
-				}
-				try {
-					currentChild.kill();
-				} catch (e) {
-					// ignore
-				}
-				currentChild = null;
-			}
-
-			currentToken = { cancelled: false };
-			var token = currentToken;
-			var endHandled = false;
-
 			function handlePlayEnd(err) {
+				playbackEnded = true;
+				if (token.statusInterval) {
+					clearInterval(token.statusInterval);
+					token.statusInterval = null;
+				}
 				if (token.cancelled) {
 					currentChild = null;
 					node.status({});
@@ -359,6 +391,50 @@ module.exports = function(RED) {
 			if (!sendOnEnd) {
 				node.send(msg);
 			}
+
+			(async function() {
+				var durationSec = null;
+				if (!isHttp) {
+					try {
+						var meta = await parseFile(pathToPlay);
+						if (
+							meta.format.duration != null &&
+							Number.isFinite(meta.format.duration) &&
+							meta.format.duration > 0
+						) {
+							durationSec = meta.format.duration;
+						}
+					} catch (e) {
+						// ignore — keep generic playing status
+					}
+				}
+				if (token.cancelled || playbackEnded || durationSec == null) {
+					return;
+				}
+
+				var startTime = Date.now();
+				function tickStatus() {
+					if (token.cancelled || playbackEnded) {
+						return;
+					}
+					var elapsed = (Date.now() - startTime) / 1000;
+					var remaining = Math.max(0, durationSec - elapsed);
+					var text = node._('playa.status.remaining', {
+						remaining: formatMmSs(remaining)
+					});
+					node.status({ fill: 'blue', shape: 'dot', text: text });
+				}
+
+				token.statusInterval = setInterval(tickStatus, 500);
+				tickStatus();
+			})().catch(function(err) {
+				if (token.statusInterval) {
+					clearInterval(token.statusInterval);
+					token.statusInterval = null;
+				}
+				node.status({ fill: 'red', shape: 'dot', text: formatStatusError(err) });
+				node.error(err);
+			});
 		});
 	}
 

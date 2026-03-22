@@ -32,6 +32,9 @@
 			"errorForbidden": "L’aperçu n’est disponible que pour les fichiers sous le répertoire utilisateur Node-RED.",
 			"errorBadRequest": "Chemin ou type de fichier invalide.",
 			"errorGeneric": "Impossible de charger l’aperçu audio."
+		},
+		"status": {
+			"remaining": "~{{remaining}}"
 		}
 	}
 }

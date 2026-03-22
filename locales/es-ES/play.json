@@ -32,6 +32,9 @@
 			"errorForbidden": "La vista previa solo está disponible para archivos dentro del directorio de usuario de Node-RED.",
 			"errorBadRequest": "Ruta o tipo de archivo no válido.",
 			"errorGeneric": "No se pudo cargar la vista previa de audio."
+		},
+		"status": {
+			"remaining": "~{{remaining}}"
 		}
 	}
 }

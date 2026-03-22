@@ -32,6 +32,9 @@
 			"errorForbidden": "プレビューは Node-RED のユーザーディレクトリ内のファイルにのみ利用できます。",
 			"errorBadRequest": "パスまたはファイルの種類が無効です。",
 			"errorGeneric": "オーディオのプレビューを読み込めませんでした。"
+		},
+		"status": {
+			"remaining": "~{{remaining}}"
 		}
 	}
 }

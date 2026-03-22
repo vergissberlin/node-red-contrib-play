@@ -56,6 +56,12 @@ function loadPlayWithMock(playImpl, options) {
 					node._err = err;
 				};
 				node.warn = function () {};
+				node._ = function _(key, params) {
+					if (key === 'playa.status.remaining' && params && params.remaining != null) {
+						return '~' + params.remaining;
+					}
+					return key;
+				};
 			},
 			registerType(name, ctor) {
 				registered[name] = ctor;
@@ -106,7 +112,12 @@ function loadPlayWithMock(playImpl, options) {
 	const playPath = path.resolve(__dirname, '..', '..', 'play.js');
 	proxyquire(playPath, {
 		'play-sound': playSoundPackage,
-		multer: mockMulter
+		multer: mockMulter,
+		'music-metadata': {
+			parseFile: async function parseFileMock() {
+				return { format: { duration: null } };
+			}
+		}
 	})(RED);
 
 	if (!registered.playa) {

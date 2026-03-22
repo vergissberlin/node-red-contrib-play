@@ -32,6 +32,9 @@
 			"errorForbidden": "仅可预览位于 Node-RED 用户目录下的文件。",
 			"errorBadRequest": "路径或文件类型无效。",
 			"errorGeneric": "无法加载音频预览。"
+		},
+		"status": {
+			"remaining": "~{{remaining}}"
 		}
 	}
 }

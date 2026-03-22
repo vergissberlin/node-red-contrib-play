@@ -32,6 +32,9 @@
 			"errorForbidden": "Vorschau ist nur für Dateien unter dem Node-RED-Benutzerverzeichnis möglich.",
 			"errorBadRequest": "Ungültiger Pfad oder Dateityp.",
 			"errorGeneric": "Audiovorschau konnte nicht geladen werden."
+		},
+		"status": {
+			"remaining": "noch {{remaining}}"
 		}
 	}
 }

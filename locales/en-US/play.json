@@ -32,6 +32,9 @@
 			"errorForbidden": "Preview is only available for files under the Node-RED user directory.",
 			"errorBadRequest": "Invalid path or file type.",
 			"errorGeneric": "Could not load audio preview."
+		},
+		"status": {
+			"remaining": "~{{remaining}}"
 		}
 	}
 }

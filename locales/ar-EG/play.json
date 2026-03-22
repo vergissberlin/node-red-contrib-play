@@ -32,6 +32,9 @@
 			"errorForbidden": "المعاينة متاحة فقط للملفات ضمن مجلد مستخدم Node-RED.",
 			"errorBadRequest": "مسار غير صالح أو نوع ملف غير صالح.",
 			"errorGeneric": "تعذّر تحميل معاينة الصوت."
+		},
+		"status": {
+			"remaining": "~{{remaining}}"
 		}
 	}
 }
