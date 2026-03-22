@@ -1,0 +1,13 @@
+{
+	"playa": {
+		"label": {
+			"name": "名称",
+			"player": "播放器",
+			"node": "playa"
+		},
+		"paletteLabel": "播放声音",
+		"placeholder": {
+			"name": "音频文件路径"
+		}
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"playa": {
+		"label": {
+			"name": "Nom",
+			"player": "Lecteur",
+			"node": "playa"
+		},
+		"paletteLabel": "lire un son",
+		"placeholder": {
+			"name": "Chemin du fichier audio"
+		}
+	}
+}

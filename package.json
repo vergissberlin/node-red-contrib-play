@@ -22,6 +22,7 @@
   "files": [
     "play.js",
     "play.html",
+    "locales",
     "examples",
     "LICENSE",
     "README.md"

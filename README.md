@@ -18,6 +18,8 @@ The **playa** node receives a message, asks the underlying [`play-sound`](https:
   - **Linux:** `aplay`, `mpg123`, `mplayer`, or SoX `play` (package names vary by distribution)
   - **Windows:** e.g. `cmdmp3` or another player you install and expose on `PATH`
 
+Palette labels, dialog text, and the Info sidebar help for **playa** are translated for multiple editor locales (see `locales/` in this package). The language follows the Node-RED editor language setting.
+
 ## Install
 
 From the directory where Node-RED is installed (or your user data directory, depending on your setup):

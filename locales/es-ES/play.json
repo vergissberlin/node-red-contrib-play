@@ -1,0 +1,13 @@
+{
+	"playa": {
+		"label": {
+			"name": "Nombre",
+			"player": "Reproductor",
+			"node": "playa"
+		},
+		"paletteLabel": "reproducir sonido",
+		"placeholder": {
+			"name": "Ruta del archivo de audio"
+		}
+	}
+}

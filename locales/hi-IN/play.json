@@ -1,0 +1,13 @@
+{
+	"playa": {
+		"label": {
+			"name": "नाम",
+			"player": "प्लेयर",
+			"node": "playa"
+		},
+		"paletteLabel": "ध्वनि चलाएँ",
+		"placeholder": {
+			"name": "साउंड फ़ाइल का पथ"
+		}
+	}
+}

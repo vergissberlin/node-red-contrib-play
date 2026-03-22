@@ -1,0 +1,13 @@
+{
+	"playa": {
+		"label": {
+			"name": "الاسم",
+			"player": "المشغّل",
+			"node": "playa"
+		},
+		"paletteLabel": "تشغيل الصوت",
+		"placeholder": {
+			"name": "مسار ملف الصوت"
+		}
+	}
+}

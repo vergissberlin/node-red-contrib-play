@@ -1,0 +1,13 @@
+{
+	"playa": {
+		"label": {
+			"name": "Name",
+			"player": "Player",
+			"node": "playa"
+		},
+		"paletteLabel": "Ton abspielen",
+		"placeholder": {
+			"name": "Pfad zur Sounddatei"
+		}
+	}
+}

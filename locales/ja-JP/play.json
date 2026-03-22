@@ -1,0 +1,13 @@
+{
+	"playa": {
+		"label": {
+			"name": "名前",
+			"player": "プレーヤー",
+			"node": "playa"
+		},
+		"paletteLabel": "音声を再生",
+		"placeholder": {
+			"name": "音声ファイルのパス"
+		}
+	}
+}

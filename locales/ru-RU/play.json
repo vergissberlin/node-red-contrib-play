@@ -1,0 +1,13 @@
+{
+	"playa": {
+		"label": {
+			"name": "Имя",
+			"player": "Проигрыватель",
+			"node": "playa"
+		},
+		"paletteLabel": "воспроизвести звук",
+		"placeholder": {
+			"name": "Путь к аудиофайлу"
+		}
+	}
+}
