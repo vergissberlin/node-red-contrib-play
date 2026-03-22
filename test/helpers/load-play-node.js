@@ -7,6 +7,15 @@ const path = require('path');
 const { EventEmitter } = require('events');
 const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 
+const availablePlayersPath = path.resolve(__dirname, '..', '..', 'lib', 'available-players.js');
+const realAvailablePlayers = require(availablePlayersPath);
+/** Pretend any configured CLI name exists so tests do not depend on host PATH (e.g. afplay on Linux CI). */
+const mockAvailablePlayers = Object.assign({}, realAvailablePlayers, {
+	commandExists: function mockCommandExists() {
+		return true;
+	}
+});
+
 /**
  * @param {function(string, function(Error|null): void): { kill?: function(): void }} playImpl
  *        Implementation for the play-sound instance’s `.play(what, options?, next?)` behaviour.
@@ -128,6 +137,7 @@ function loadPlayWithMock(playImpl, options) {
 	proxyquire(playPath, {
 		'play-sound': playSoundPackage,
 		multer: mockMulter,
+		'./lib/available-players.js': mockAvailablePlayers,
 		'./lib/audio-duration.js': async function mockDuration() {
 			return audioDurationSeconds;
 		}
