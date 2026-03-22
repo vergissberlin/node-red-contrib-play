@@ -55,6 +55,7 @@ function loadPlayWithMock(playImpl, options) {
 				node.error = function (err) {
 					node._err = err;
 				};
+				node.warn = function () {};
 			},
 			registerType(name, ctor) {
 				registered[name] = ctor;
@@ -67,7 +68,14 @@ function loadPlayWithMock(playImpl, options) {
 		if (options.playSoundOptsLog) {
 			options.playSoundOptsLog.push(opts);
 		}
+		var resolvedPlayer = '';
+		if (opts && opts.player) {
+			resolvedPlayer = opts.player;
+		} else if (opts && Array.isArray(opts.players) && opts.players.length) {
+			resolvedPlayer = opts.players[0];
+		}
 		return {
+			player: resolvedPlayer,
 			play: function play(what, playOptions, next) {
 				next = typeof playOptions === 'function' ? playOptions : next;
 				return playImpl(what, next || function noop() {});

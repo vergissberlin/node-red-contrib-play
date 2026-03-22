@@ -26,7 +26,8 @@ module.exports = function(RED) {
 		darwin: ['afplay', 'mplayer', 'mpg123', 'mpg321', 'play'],
 		linux: ['aplay', 'mpg123', 'mplayer', 'play', 'omxplayer', 'mpg321', 'cvlc'],
 		win32: ['cmdmp3', 'powershell'],
-		default: ['mplayer', 'mpg123', 'mpg321', 'play', 'cvlc']
+		// Prefer common CLI tools before mplayer (often absent); avoids spawn ENOENT on exotic platforms.
+		default: ['mpg123', 'mpg321', 'play', 'cvlc', 'mplayer']
 	};
 
 	var PLAYERS_ROUTE = '/contrib-playa/players';
@@ -65,8 +66,13 @@ module.exports = function(RED) {
 	}
 
 	function filterPlayersOnPath(candidates) {
-		var filtered = candidates.filter(commandExists);
-		return filtered.length ? filtered : candidates;
+		return candidates.filter(commandExists);
+	}
+
+	function playersResolvedForPlay(platform) {
+		var raw = playersForPlatform(platform);
+		var available = filterPlayersOnPath(raw);
+		return available.length ? available : raw;
 	}
 
 	function getPlayersApiPayload() {
@@ -207,6 +213,36 @@ module.exports = function(RED) {
 	}
 
 	/**
+	 * @param {*} err play-sound passes exit code from `close` or an Error from spawn
+	 * @param {{ path?: string, player?: string }} [ctx]
+	 */
+	function normalizePlayErr(err, ctx) {
+		ctx = ctx || {};
+		if (err == null || err === false) {
+			return null;
+		}
+		if (typeof err === 'number') {
+			if (err === 0) {
+				return null;
+			}
+			var pl =
+				ctx.player != null && String(ctx.player).trim()
+					? String(ctx.player).trim()
+					: 'unknown';
+			var file = ctx.path != null ? String(ctx.path) : '';
+			var msg =
+				'Player "' +
+				pl +
+				'" exited with code ' +
+				err +
+				(file ? ' — ' + file : '') +
+				'. Unsupported format, unreadable file, or player args.';
+			return new Error(msg);
+		}
+		return err;
+	}
+
+	/**
 	 * Player options
 	 *
 	 * @property {*} config Configuration object
@@ -218,11 +254,19 @@ module.exports = function(RED) {
 		var playerName = (config.player != null && String(config.player).trim()) || '';
 		var stopPrevious = config.stopPrevious !== false;
 		var sendOnEnd = config.sendOnEnd === true;
+		if (playerName && !commandExists(playerName)) {
+			node.warn(
+				'Player "' +
+					playerName +
+					'" not found on PATH for this host; using automatic selection.'
+			);
+			playerName = '';
+		}
 		var playerOpts = {};
 		if (playerName) {
 			playerOpts.player = playerName;
 		} else {
-			playerOpts.players = playersForPlatform(process.platform);
+			playerOpts.players = playersResolvedForPlay(process.platform);
 		}
 		var audioPlayer = createPlaySound(playerOpts);
 
@@ -265,13 +309,23 @@ module.exports = function(RED) {
 
 			currentToken = { cancelled: false };
 			var token = currentToken;
+			var endHandled = false;
 
-			var audio = audioPlayer.play(pathToPlay, function(err) {
+			function handlePlayEnd(err) {
 				if (token.cancelled) {
+					currentChild = null;
 					node.status({});
 					return;
 				}
+				if (endHandled) {
+					return;
+				}
+				endHandled = true;
 				currentChild = null;
+				err = normalizePlayErr(err, {
+					path: pathToPlay,
+					player: audioPlayer.player || ''
+				});
 				if (err) {
 					node.status({ fill: 'red', shape: 'dot', text: formatStatusError(err) });
 					return node.error(err);
@@ -280,13 +334,21 @@ module.exports = function(RED) {
 				if (sendOnEnd) {
 					node.send(msg);
 				}
-			});
+			}
+
+			var audio = audioPlayer.play(pathToPlay, handlePlayEnd);
 
 			if (!audio) {
 				currentToken = null;
 				return;
 			}
 			currentChild = audio;
+
+			if (typeof audio.on === 'function') {
+				audio.on('error', function(err) {
+					handlePlayEnd(err);
+				});
+			}
 
 			if (!sendOnEnd) {
 				node.send(msg);

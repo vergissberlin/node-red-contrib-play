@@ -2,6 +2,7 @@
 
 const { describe, it } = require('node:test');
 const assert = require('node:assert');
+const { EventEmitter } = require('events');
 const { loadPlayWithMock } = require('./helpers/load-play-node');
 
 describe('playa node', () => {
@@ -149,6 +150,19 @@ describe('playa node', () => {
 		assert.strictEqual(playedPath, 'fallback');
 	});
 
+	it('formats non-zero exit code with player and path in the error message', () => {
+		const playImpl = (path, cb) => {
+			cb(1);
+			return { kill: () => {} };
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({ name: 'x', id: 'n-exit-code', player: '' });
+		node.emit('input', { payload: '/data/test.wav' });
+		assert.ok(node._err instanceof Error);
+		assert.match(node._err.message, /exited with code 1/);
+		assert.match(node._err.message, /\/data\/test\.wav/);
+	});
+
 	it('reports error via node.error when play callback receives an error', () => {
 		const playImpl = (path, cb) => {
 			cb(new Error('player failed'));
@@ -164,6 +178,24 @@ describe('playa node', () => {
 			{ fill: 'blue', shape: 'dot' },
 			{ fill: 'red', shape: 'dot', text: 'player failed' }
 		]);
+	});
+
+	it('handles child error event (e.g. spawn ENOENT) via node.error', async () => {
+		const playImpl = () => {
+			const child = new EventEmitter();
+			child.kill = () => {};
+			setImmediate(() => {
+				child.emit('error', new Error('spawn mplayer ENOENT'));
+			});
+			return child;
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({ name: 'x', id: 'n-spawn-enoent' });
+		node.emit('input', { payload: '/x.wav' });
+		await new Promise((r) => setImmediate(r));
+		assert.ok(node._err instanceof Error);
+		assert.strictEqual(node._err.message, 'spawn mplayer ENOENT');
+		assert.strictEqual(node._statusLog[1].text, 'spawn mplayer ENOENT'.slice(0, 20));
 	});
 
 	it('reports async play errors on node.error', async () => {

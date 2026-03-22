@@ -98,6 +98,8 @@ Replace the payload with a real file path on the machine where Node-RED runs.
 ## Troubleshooting
 
 - **No sound:** Confirm the file exists, the path is correct for the OS user running Node-RED, and a player binary is installed and on `PATH`.
+- **`spawn … ENOENT`:** The chosen CLI (for example `mplayer`) is not installed or not on `PATH` for the Node-RED process. Install it, use **Automatic** so only players that resolve on this host are used, or pick another **Player**. If you saved a flow from another machine, an invalid player name is ignored with a warning and automatic selection is used.
+- **`Player "…" exited with code 1`:** The process ran but returned failure (common if the **codec/format** is not supported by that CLI, the **path** is wrong, or the file is not readable by the Node-RED user). Try another **Player**, convert the file (e.g. WAV/MP3), or confirm permissions and path on the host.
 - **Errors in the debug sidebar:** Read the message from `node.error`; it usually reflects the underlying player or spawn failure.
 
 ## Contributing
