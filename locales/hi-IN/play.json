@@ -3,11 +3,18 @@
 		"label": {
 			"name": "नाम",
 			"player": "प्लेयर",
+			"soundPath": "साउंड फ़ाइल का पथ",
+			"upload": "साउंड फ़ाइल अपलोड करें",
 			"node": "playa"
 		},
 		"paletteLabel": "ध्वनि चलाएँ",
 		"placeholder": {
-			"name": "साउंड फ़ाइल का पथ"
+			"name": "साउंड फ़ाइल का पथ",
+			"soundPath": "पूर्ण पथ या नीचे फ़ाइल अपलोड करें"
+		},
+		"notify": {
+			"uploadSuccess": "फ़ाइल अपलोड हो गई",
+			"uploadFail": "अपलोड विफल"
 		}
 	}
 }

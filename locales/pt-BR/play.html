@@ -1,4 +1,4 @@
 <script type="text/x-red" data-help-name="playa">
 <p>Reproduz um arquivo de áudio usando um player de linha de comando na máquina em que o Node-RED está em execução.</p>
-<p>O campo <b>Nome</b> é usado como caminho alternativo quando <code>msg.payload</code> estiver ausente ou vazio. Selecione o <b>Reprodutor</b> da CLI (por exemplo <code>afplay</code> no macOS, <code>aplay</code> em muitos sistemas Linux).</p>
+<p>Ordem do caminho de reprodução: <code>msg.payload</code> (se não vazio), depois <b>Caminho do arquivo de áudio</b> (digitado ou definido pelo envio), então <b>Nome</b>. <b>Nome</b> também é o rótulo do nó. Os envios ficam no diretório de usuário do Node-RED em <code>node-red-contrib-play/uploads</code> (máx. 10&nbsp;MB; extensões: wav, mp3, ogg, flac, m4a, aac). Exportações de fluxo não incluem esses binários. Selecione o <b>Reprodutor</b> da CLI (por exemplo <code>afplay</code> no macOS, <code>aplay</code> em muitos sistemas Linux).</p>
 </script>

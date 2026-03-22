@@ -3,11 +3,18 @@
 		"label": {
 			"name": "名称",
 			"player": "播放器",
+			"soundPath": "音频文件路径",
+			"upload": "上传音频文件",
 			"node": "playa"
 		},
 		"paletteLabel": "播放声音",
 		"placeholder": {
-			"name": "音频文件路径"
+			"name": "音频文件路径",
+			"soundPath": "绝对路径或在下方上传文件"
+		},
+		"notify": {
+			"uploadSuccess": "文件已上传",
+			"uploadFail": "上传失败"
 		}
 	}
 }

@@ -3,11 +3,18 @@
 		"label": {
 			"name": "Nome",
 			"player": "Reprodutor",
+			"soundPath": "Caminho do arquivo de áudio",
+			"upload": "Enviar arquivo de áudio",
 			"node": "playa"
 		},
 		"paletteLabel": "reproduzir som",
 		"placeholder": {
-			"name": "Caminho do arquivo de áudio"
+			"name": "Caminho do arquivo de áudio",
+			"soundPath": "Caminho absoluto ou envie um arquivo abaixo"
+		},
+		"notify": {
+			"uploadSuccess": "Arquivo enviado",
+			"uploadFail": "Falha no envio"
 		}
 	}
 }

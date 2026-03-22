@@ -1,4 +1,4 @@
 <script type="text/x-red" data-help-name="playa">
 <p>Node-RED चलने वाली मशीन पर कमांड-लाइन प्लेयर से ऑडियो फ़ाइल चलाता है।</p>
-<p>जब <code>msg.payload</code> खाली या न हो, तब <b>नाम</b> फ़ील्ड फ़ॉलबैक पथ के रूप में उपयोग होता है। <b>प्लेयर</b> में CLI चुनें (उदाहरण: macOS पर <code>afplay</code>, कई Linux पर <code>aplay</code>)।</p>
+<p>प्लेबैक पथ का क्रम: खाली न होने पर <code>msg.payload</code>, फिर <b>साउंड फ़ाइल का पथ</b> (टाइप या अपलोड से), फिर <b>नाम</b>। <b>नाम</b> नोड लेबल भी है। अपलोड की गई फ़ाइलें Node-RED उपयोगकर्ता डायरेक्टरी में <code>node-red-contrib-play/uploads</code> पर सहेजी जाती हैं (अधिकतम 10&nbsp;MB; एक्सटेंशन: wav, mp3, ogg, flac, m4a, aac)। फ़्लो निर्यात में ये बाइनरी शामिल नहीं होतीं। <b>प्लेयर</b> में CLI चुनें (उदाहरण: macOS पर <code>afplay</code>, कई Linux पर <code>aplay</code>)।</p>
 </script>

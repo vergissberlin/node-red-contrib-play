@@ -1,4 +1,4 @@
 <script type="text/x-red" data-help-name="playa">
 <p>Lit un fichier audio via un lecteur en ligne de commande sur la machine qui exécute Node-RED.</p>
-<p>Le champ <b>Nom</b> sert de chemin de repli lorsque <code>msg.payload</code> est absent ou vide. Choisissez le <b>Lecteur</b> CLI (par ex. <code>afplay</code> sur macOS, <code>aplay</code> sur de nombreux systèmes Linux).</p>
+<p>Ordre du chemin de lecture&nbsp;: <code>msg.payload</code> (s’il n’est pas vide), puis <b>Chemin du fichier audio</b> (saisi ou défini par téléversement), puis <b>Nom</b>. <b>Nom</b> est aussi l’étiquette du nœud. Les fichiers téléversés sont stockés dans le répertoire utilisateur Node-RED sous <code>node-red-contrib-play/uploads</code> (max. 10&nbsp;Mo&nbsp;; extensions&nbsp;: wav, mp3, ogg, flac, m4a, aac). Les exports de flux n’incluent pas ces fichiers binaires. Choisissez le <b>Lecteur</b> CLI (par ex. <code>afplay</code> sur macOS, <code>aplay</code> sur de nombreux systèmes Linux).</p>
 </script>

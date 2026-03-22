@@ -3,11 +3,18 @@
 		"label": {
 			"name": "الاسم",
 			"player": "المشغّل",
+			"soundPath": "مسار ملف الصوت",
+			"upload": "رفع ملف صوتي",
 			"node": "playa"
 		},
 		"paletteLabel": "تشغيل الصوت",
 		"placeholder": {
-			"name": "مسار ملف الصوت"
+			"name": "مسار ملف الصوت",
+			"soundPath": "مسار مطلق أو ارفع ملفًا أدناه"
+		},
+		"notify": {
+			"uploadSuccess": "تم رفع الملف",
+			"uploadFail": "فشل الرفع"
 		}
 	}
 }

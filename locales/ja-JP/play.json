@@ -3,11 +3,18 @@
 		"label": {
 			"name": "名前",
 			"player": "プレーヤー",
+			"soundPath": "音声ファイルのパス",
+			"upload": "音声ファイルをアップロード",
 			"node": "playa"
 		},
 		"paletteLabel": "音声を再生",
 		"placeholder": {
-			"name": "音声ファイルのパス"
+			"name": "音声ファイルのパス",
+			"soundPath": "絶対パス、または下でファイルをアップロード"
+		},
+		"notify": {
+			"uploadSuccess": "ファイルをアップロードしました",
+			"uploadFail": "アップロードに失敗しました"
 		}
 	}
 }

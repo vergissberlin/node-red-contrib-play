@@ -3,11 +3,18 @@
 		"label": {
 			"name": "Name",
 			"player": "Player",
+			"soundPath": "Sound file path",
+			"upload": "Upload sound file",
 			"node": "playa"
 		},
 		"paletteLabel": "play sound",
 		"placeholder": {
-			"name": "Path to sound file"
+			"name": "Path to sound file",
+			"soundPath": "Absolute path or upload a file below"
+		},
+		"notify": {
+			"uploadSuccess": "File uploaded",
+			"uploadFail": "Upload failed"
 		}
 	}
 }

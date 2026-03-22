@@ -3,11 +3,18 @@
 		"label": {
 			"name": "Nom",
 			"player": "Lecteur",
+			"soundPath": "Chemin du fichier audio",
+			"upload": "Téléverser un fichier audio",
 			"node": "playa"
 		},
 		"paletteLabel": "lire un son",
 		"placeholder": {
-			"name": "Chemin du fichier audio"
+			"name": "Chemin du fichier audio",
+			"soundPath": "Chemin absolu ou téléversement ci-dessous"
+		},
+		"notify": {
+			"uploadSuccess": "Fichier téléversé",
+			"uploadFail": "Échec du téléversement"
 		}
 	}
 }

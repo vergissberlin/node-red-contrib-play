@@ -1,4 +1,4 @@
 <script type="text/x-red" data-help-name="playa">
 <p>在运行 Node-RED 的主机上通过命令行播放器播放音频文件。</p>
-<p>当缺少或为空 <code>msg.payload</code> 时，使用 <b>名称</b> 字段作为回退路径。在 <b>播放器</b> 中选择 CLI 程序（例如 macOS 上的 <code>afplay</code>、许多 Linux 系统上的 <code>aplay</code>）。</p>
+<p>播放路径顺序：<code>msg.payload</code>（若非空），然后 <b>音频文件路径</b>（手动填写或上传后写入），再 <b>名称</b>。<b>名称</b> 也是节点标签。上传文件保存在 Node-RED 用户目录下的 <code>node-red-contrib-play/uploads</code>（最大 10&nbsp;MB；扩展名：wav、mp3、ogg、flac、m4a、aac）。流程导出不包含这些二进制文件。在 <b>播放器</b> 中选择 CLI（例如 macOS 上的 <code>afplay</code>、许多 Linux 上的 <code>aplay</code>）。</p>
 </script>

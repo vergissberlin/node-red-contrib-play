@@ -3,11 +3,18 @@
 		"label": {
 			"name": "Nombre",
 			"player": "Reproductor",
+			"soundPath": "Ruta del archivo de audio",
+			"upload": "Subir archivo de audio",
 			"node": "playa"
 		},
 		"paletteLabel": "reproducir sonido",
 		"placeholder": {
-			"name": "Ruta del archivo de audio"
+			"name": "Ruta del archivo de audio",
+			"soundPath": "Ruta absoluta o suba un archivo abajo"
+		},
+		"notify": {
+			"uploadSuccess": "Archivo subido",
+			"uploadFail": "Error al subir"
 		}
 	}
 }

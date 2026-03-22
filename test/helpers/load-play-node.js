@@ -61,9 +61,30 @@ function loadPlayWithMock(playImpl) {
 		};
 	};
 
+	function mockMulter() {
+		return {
+			single: function single() {
+				return function uploadNoop(req, res, cb) {
+					req.file = null;
+					cb(null);
+				};
+			}
+		};
+	}
+	mockMulter.diskStorage = function diskStorage() {
+		return {};
+	};
+	mockMulter.MulterError = class MulterError extends Error {
+		constructor(message, code) {
+			super(message);
+			this.code = code || '';
+		}
+	};
+
 	const playPath = path.resolve(__dirname, '..', '..', 'play.js');
 	proxyquire(playPath, {
-		'play-sound': playSoundPackage
+		'play-sound': playSoundPackage,
+		multer: mockMulter
 	})(RED);
 
 	if (!registered.playa) {
