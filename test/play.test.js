@@ -301,4 +301,60 @@ describe('playa node', () => {
 		assert.ok(Array.isArray(optsLog[0].players));
 		assert.ok(optsLog[0].players.length > 0);
 	});
+
+	it('stop admin route kills current playback for the node id', () => {
+		const events = [];
+		const playImpl = (path, cb) => {
+			events.push({ op: 'play', path });
+			return {
+				kill: () => events.push({ op: 'kill', path })
+			};
+		};
+		const { RED, PlayaNode } = loadPlayWithMock(playImpl);
+		new PlayaNode({ name: 'x', id: 'n-stop-route' });
+		const node = RED.nodes.getNode('n-stop-route');
+		node.emit('input', { payload: FIXTURE_WAV });
+		assert.deepStrictEqual(events, [{ op: 'play', path: FIXTURE_WAV }]);
+
+		const stopHandler = RED._postHandlers.find((h) => h.route === '/contrib-playa/stop/:id');
+		assert.ok(stopHandler, 'expected POST /contrib-playa/stop/:id to be registered');
+		const res = {
+			statusCode: 200,
+			body: null,
+			status(code) {
+				this.statusCode = code;
+				return this;
+			},
+			json(data) {
+				this.body = data;
+			}
+		};
+		stopHandler.handler({ params: { id: 'n-stop-route' } }, res);
+		assert.strictEqual(res.statusCode, 200);
+		assert.deepStrictEqual(res.body, { ok: true });
+		assert.deepStrictEqual(events, [
+			{ op: 'play', path: FIXTURE_WAV },
+			{ op: 'kill', path: FIXTURE_WAV }
+		]);
+	});
+
+	it('stop admin route returns 404 when node id is unknown', () => {
+		const playImpl = () => ({ kill: () => {} });
+		const { RED } = loadPlayWithMock(playImpl);
+		const stopHandler = RED._postHandlers.find((h) => h.route === '/contrib-playa/stop/:id');
+		const res = {
+			statusCode: 200,
+			body: null,
+			status(code) {
+				this.statusCode = code;
+				return this;
+			},
+			json(data) {
+				this.body = data;
+			}
+		};
+		stopHandler.handler({ params: { id: 'n-missing' } }, res);
+		assert.strictEqual(res.statusCode, 404);
+		assert.deepStrictEqual(res.body, { error: 'Node not found' });
+	});
 });

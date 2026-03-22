@@ -24,7 +24,11 @@ module.exports = function(RED) {
 	var getAudioDurationSeconds = require('./lib/audio-duration.js');
 
 	var PLAYERS_ROUTE = '/contrib-playa/players';
+	var STOP_ROUTE = '/contrib-playa/stop/:id';
 	var cachedPlayersPayload = null;
+
+	/** @type {Map<string, function(): void>} */
+	var playaStopByNodeId = new Map();
 
 	function getPlayersApiPayload() {
 		if (cachedPlayersPayload) {
@@ -150,6 +154,27 @@ module.exports = function(RED) {
 		RED.auth.needsPermission('flows.read'),
 		function(req, res) {
 			res.json(getPlayersApiPayload());
+		}
+	);
+
+	RED.httpAdmin.post(
+		STOP_ROUTE,
+		RED.auth.needsPermission('flows.write'),
+		function(req, res) {
+			var id = req.params != null ? req.params.id : null;
+			if (id == null || String(id).trim() === '') {
+				return res.status(400).json({ error: 'Missing node id' });
+			}
+			var runtimeNode = RED.nodes.getNode(id);
+			if (!runtimeNode || runtimeNode.type !== 'playa') {
+				return res.status(404).json({ error: 'Node not found' });
+			}
+			var stopFn = playaStopByNodeId.get(id);
+			if (!stopFn) {
+				return res.status(404).json({ error: 'Node not found' });
+			}
+			stopFn();
+			res.json({ ok: true });
 		}
 	);
 
@@ -317,7 +342,7 @@ module.exports = function(RED) {
 		var currentChild = null;
 		var currentToken = null;
 
-		node.on('close', function(done) {
+		function stopPlaybackFromEditor() {
 			if (currentToken) {
 				currentToken.cancelled = true;
 				if (currentToken.statusInterval) {
@@ -334,6 +359,13 @@ module.exports = function(RED) {
 				currentChild = null;
 			}
 			node.status({});
+		}
+
+		playaStopByNodeId.set(node.id, stopPlaybackFromEditor);
+
+		node.on('close', function(done) {
+			playaStopByNodeId.delete(node.id);
+			stopPlaybackFromEditor();
 			if (typeof done === 'function') {
 				done();
 			}

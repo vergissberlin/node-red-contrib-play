@@ -25,7 +25,10 @@
 		"notify": {
 			"uploadSuccess": "फ़ाइल अपलोड हो गई",
 			"uploadFail": "अपलोड विफल",
-			"playersLoadFallback": "प्लेयर सूची लोड नहीं हो सकी; सामान्य फ़ॉलबैक उपयोग किया जा रहा है।"
+			"playersLoadFallback": "प्लेयर सूची लोड नहीं हो सकी; सामान्य फ़ॉलबैक उपयोग किया जा रहा है।",
+			"stopOk": "Playback stopped",
+			"stopFailed": "Could not stop playback.",
+			"stopNotDeployed": "Deploy the flow first, or this node is not running."
 		},
 		"preview": {
 			"errorNotFound": "फ़ाइल नहीं मिली या पढ़ी नहीं जा सकती।",

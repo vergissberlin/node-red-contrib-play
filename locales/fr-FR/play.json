@@ -25,7 +25,10 @@
 		"notify": {
 			"uploadSuccess": "Fichier téléversé",
 			"uploadFail": "Échec du téléversement",
-			"playersLoadFallback": "Impossible de charger la liste des lecteurs ; utilisation d’une liste de secours."
+			"playersLoadFallback": "Impossible de charger la liste des lecteurs ; utilisation d’une liste de secours.",
+			"stopOk": "Playback stopped",
+			"stopFailed": "Could not stop playback.",
+			"stopNotDeployed": "Deploy the flow first, or this node is not running."
 		},
 		"preview": {
 			"errorNotFound": "Fichier introuvable ou illisible.",

@@ -25,7 +25,10 @@
 		"notify": {
 			"uploadSuccess": "Файл загружен",
 			"uploadFail": "Ошибка загрузки",
-			"playersLoadFallback": "Не удалось загрузить список проигрывателей; используется запасной вариант."
+			"playersLoadFallback": "Не удалось загрузить список проигрывателей; используется запасной вариант.",
+			"stopOk": "Playback stopped",
+			"stopFailed": "Could not stop playback.",
+			"stopNotDeployed": "Deploy the flow first, or this node is not running."
 		},
 		"preview": {
 			"errorNotFound": "Файл не найден или недоступен для чтения.",

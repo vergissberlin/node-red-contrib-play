@@ -20,13 +20,18 @@ function loadPlayWithMock(playImpl, options) {
 	var audioDurationSeconds =
 		options.audioDurationSeconds !== undefined ? options.audioDurationSeconds : null;
 	const registered = {};
+	const nodesById = new Map();
 	const RED = {
 		settings: {
 			userDir: '/tmp/node-red-test-userdir'
 		},
+		_postHandlers: [],
 		httpAdmin: {
-			post: function post() {
-				// Upload route registration; no-op for unit tests.
+			post: function post(route, auth, handler) {
+				if (typeof auth === 'function') {
+					handler = auth;
+				}
+				RED._postHandlers.push({ route, handler });
 			},
 			get: function get() {
 				// Preview route registration; no-op for unit tests.
@@ -47,6 +52,8 @@ function loadPlayWithMock(playImpl, options) {
 				EventEmitter.call(node);
 				node.name = config.name != null ? config.name : '';
 				node.id = config.id != null ? config.id : 'n1';
+				node.type = 'playa';
+				nodesById.set(node.id, node);
 				node._statusLog = [];
 				node.status = function status(s) {
 					node._statusLog.push(s);
@@ -64,6 +71,9 @@ function loadPlayWithMock(playImpl, options) {
 					}
 					return key;
 				};
+			},
+			getNode(id) {
+				return nodesById.get(id);
 			},
 			registerType(name, ctor) {
 				registered[name] = ctor;

@@ -25,7 +25,10 @@
 		"notify": {
 			"uploadSuccess": "ファイルをアップロードしました",
 			"uploadFail": "アップロードに失敗しました",
-			"playersLoadFallback": "プレーヤー一覧を読み込めませんでした。汎用の一覧を使います。"
+			"playersLoadFallback": "プレーヤー一覧を読み込めませんでした。汎用の一覧を使います。",
+			"stopOk": "Playback stopped",
+			"stopFailed": "Could not stop playback.",
+			"stopNotDeployed": "Deploy the flow first, or this node is not running."
 		},
 		"preview": {
 			"errorNotFound": "ファイルが見つからないか読み取れません。",

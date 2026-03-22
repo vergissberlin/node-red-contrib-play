@@ -3,5 +3,6 @@
 <p>Ordem do caminho de reprodução: <code>msg.payload</code> (se não vazio), depois <b>Caminho do arquivo de áudio</b> (digitado ou definido pelo envio), então <b>Nome</b>. <b>Nome</b> também é o rótulo do nó. Os envios ficam no diretório de usuário do Node-RED em <code>node-red-contrib-play/uploads</code> (máx. 10&nbsp;MB; extensões: wav, mp3, ogg, flac, m4a, aac). Exportações de fluxo não incluem esses binários.</p>
 <p><b>Parar reprodução anterior</b> (padrão: ligado): antes de iniciar um novo arquivo, o nó encerra o processo do player ainda em execução do último disparo. Desative para permitir sons sobrepostos.</p>
 <p><b>Enviar saída ao terminar a reprodução</b> (padrão: desligado): quando ativado, a mensagem é enviada depois que o player termina com sucesso; quando desligado, a mensagem é enviada logo após o início da reprodução (como nas versões anteriores).</p>
+<p lang="en">The <b>button</b> on the node edge (like Inject) calls the admin API to <b>stop the current playback</b> for this node on the runtime host. Deploy the flow first; requires editor access with permission to change flows.</p>
 <p>Selecione o <b>Reprodutor</b> da CLI (por exemplo <code>afplay</code> no macOS, <code>aplay</code> em muitos sistemas Linux).</p>
 </script>

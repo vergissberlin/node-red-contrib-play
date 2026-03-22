@@ -25,7 +25,10 @@
 		"notify": {
 			"uploadSuccess": "File uploaded",
 			"uploadFail": "Upload failed",
-			"playersLoadFallback": "Could not load player list; using a generic fallback."
+			"playersLoadFallback": "Could not load player list; using a generic fallback.",
+			"stopOk": "Playback stopped",
+			"stopFailed": "Could not stop playback.",
+			"stopNotDeployed": "Deploy the flow first, or this node is not running."
 		},
 		"preview": {
 			"errorNotFound": "File not found or not readable.",

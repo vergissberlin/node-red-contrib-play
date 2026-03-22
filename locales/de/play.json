@@ -25,7 +25,10 @@
 		"notify": {
 			"uploadSuccess": "Datei hochgeladen",
 			"uploadFail": "Upload fehlgeschlagen",
-			"playersLoadFallback": "Player-Liste konnte nicht geladen werden; es wird ein Fallback verwendet."
+			"playersLoadFallback": "Player-Liste konnte nicht geladen werden; es wird ein Fallback verwendet.",
+			"stopOk": "Wiedergabe gestoppt",
+			"stopFailed": "Wiedergabe konnte nicht gestoppt werden.",
+			"stopNotDeployed": "Flow zuerst deployen, oder dieser Knoten läuft nicht."
 		},
 		"preview": {
 			"errorNotFound": "Datei nicht gefunden oder nicht lesbar.",

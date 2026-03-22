@@ -25,7 +25,10 @@
 		"notify": {
 			"uploadSuccess": "تم رفع الملف",
 			"uploadFail": "فشل الرفع",
-			"playersLoadFallback": "تعذّر تحميل قائمة المشغّلات؛ جارٍ استخدام قائمة احتياطية عامة."
+			"playersLoadFallback": "تعذّر تحميل قائمة المشغّلات؛ جارٍ استخدام قائمة احتياطية عامة.",
+			"stopOk": "Playback stopped",
+			"stopFailed": "Could not stop playback.",
+			"stopNotDeployed": "Deploy the flow first, or this node is not running."
 		},
 		"preview": {
 			"errorNotFound": "الملف غير موجود أو غير قابل للقراءة.",

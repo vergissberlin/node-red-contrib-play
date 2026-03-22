@@ -25,7 +25,10 @@
 		"notify": {
 			"uploadSuccess": "文件已上传",
 			"uploadFail": "上传失败",
-			"playersLoadFallback": "无法加载播放器列表，已使用通用后备列表。"
+			"playersLoadFallback": "无法加载播放器列表，已使用通用后备列表。",
+			"stopOk": "Playback stopped",
+			"stopFailed": "Could not stop playback.",
+			"stopNotDeployed": "Deploy the flow first, or this node is not running."
 		},
 		"preview": {
 			"errorNotFound": "找不到文件或无法读取。",

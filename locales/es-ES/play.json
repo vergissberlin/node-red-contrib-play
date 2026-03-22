@@ -25,7 +25,10 @@
 		"notify": {
 			"uploadSuccess": "Archivo subido",
 			"uploadFail": "Error al subir",
-			"playersLoadFallback": "No se pudo cargar la lista de reproductores; se usa una lista genérica."
+			"playersLoadFallback": "No se pudo cargar la lista de reproductores; se usa una lista genérica.",
+			"stopOk": "Playback stopped",
+			"stopFailed": "Could not stop playback.",
+			"stopNotDeployed": "Deploy the flow first, or this node is not running."
 		},
 		"preview": {
 			"errorNotFound": "Archivo no encontrado o no legible.",
