@@ -7,6 +7,27 @@
 * Editor UI and Info sidebar help for **playa** internationalised in ten locales: en-US, zh-CN, es-ES, hi-IN, ar-EG, fr-FR, pt-BR, de-DE, ja-JP, ru-RU (follows the Node-RED editor language).
 * **examples:** add bundled sample `examples/sounds/beep.wav`, `examples/README.md`, and flow `Play bundled beep.wav.json` for quick testing.
 
+## [0.2.0](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.1.0...v0.2.0) (2026-03-22)
+
+
+### Features
+
+* **examples:** add bundled sound sample and update README for clarity ([6e7e62d](https://github.com/vergissberlin/node-red-contrib-play/commit/6e7e62d7ea9eea67c20f3e2af7b6dac0878afe41))
+* **localization:** add internationalization for playa node in 10 locales ([2695739](https://github.com/vergissberlin/node-red-contrib-play/commit/26957397be0f44922f6c35e9913655f8b68efab8))
+* **localization:** add localization support for pt-BR, ru-RU, and zh-CN ([2695739](https://github.com/vergissberlin/node-red-contrib-play/commit/26957397be0f44922f6c35e9913655f8b68efab8))
+
+
+### Miscellaneous Chores
+
+* **changelog:** remove unnecessary blank lines and update README with contributing section ([14b0877](https://github.com/vergissberlin/node-red-contrib-play/commit/14b08771dba4ea97efcc0d6b1cbec3fcf95f568e))
+* **package.json:** include 'locales' directory in package files ([2695739](https://github.com/vergissberlin/node-red-contrib-play/commit/26957397be0f44922f6c35e9913655f8b68efab8))
+* **workflows:** update Node.js and action versions in CI workflows ([4e4d908](https://github.com/vergissberlin/node-red-contrib-play/commit/4e4d908cac05efa6d83b6bc11c78ab71e949545e))
+
+
+### Documentation
+
+* **CONTRIBUTING.md:** improve table formatting for clarity ([04bf55b](https://github.com/vergissberlin/node-red-contrib-play/commit/04bf55baa2fcb079afc98504d3b9f4002960ce3d))
+
 ## [0.1.0](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.0.5...v0.1.0) (2026-03-21)
 
 ### Features
