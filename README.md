@@ -40,8 +40,8 @@ sudo apt-get install sox libsox-fmt-all
 
 ### Message contract
 
-| Property    | Role |
-|------------|------|
+| Property      | Role                                                                                                                  |
+|---------------|-----------------------------------------------------------------------------------------------------------------------|
 | `msg.payload` | Path to the sound file (string). If missing or empty, the node uses the **configured node name** as the path instead. |
 
 The node **always sends the incoming message** to the output after starting playback (same object reference as in the tests). Connect downstream nodes if you need to chain logic after a play request.
@@ -87,6 +87,10 @@ Replace the payload with a real file path on the machine where Node-RED runs.
 
 - **No sound:** Confirm the file exists, the path is correct for the OS user running Node-RED, and a player binary is installed and on `PATH`.
 - **Errors in the debug sidebar:** Read the message from `node.error`; it usually reflects the underlying player or spawn failure.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to run tests and load this package into a local Node-RED while developing.
 
 ## Thanks
 
