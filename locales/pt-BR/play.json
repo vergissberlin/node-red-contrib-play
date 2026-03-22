@@ -5,6 +5,7 @@
 			"player": "Reprodutor",
 			"soundPath": "Caminho do arquivo de áudio",
 			"upload": "Enviar arquivo de áudio",
+			"preview": "Pré-visualização",
 			"node": "playa"
 		},
 		"paletteLabel": "reproduzir som",
@@ -15,6 +16,12 @@
 		"notify": {
 			"uploadSuccess": "Arquivo enviado",
 			"uploadFail": "Falha no envio"
+		},
+		"preview": {
+			"errorNotFound": "Arquivo não encontrado ou ilegível.",
+			"errorForbidden": "A pré-visualização só está disponível para arquivos no diretório de usuário do Node-RED.",
+			"errorBadRequest": "Caminho ou tipo de arquivo inválido.",
+			"errorGeneric": "Não foi possível carregar a pré-visualização de áudio."
 		}
 	}
 }

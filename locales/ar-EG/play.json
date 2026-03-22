@@ -5,6 +5,7 @@
 			"player": "المشغّل",
 			"soundPath": "مسار ملف الصوت",
 			"upload": "رفع ملف صوتي",
+			"preview": "معاينة",
 			"node": "playa"
 		},
 		"paletteLabel": "تشغيل الصوت",
@@ -15,6 +16,12 @@
 		"notify": {
 			"uploadSuccess": "تم رفع الملف",
 			"uploadFail": "فشل الرفع"
+		},
+		"preview": {
+			"errorNotFound": "الملف غير موجود أو غير قابل للقراءة.",
+			"errorForbidden": "المعاينة متاحة فقط للملفات ضمن مجلد مستخدم Node-RED.",
+			"errorBadRequest": "مسار غير صالح أو نوع ملف غير صالح.",
+			"errorGeneric": "تعذّر تحميل معاينة الصوت."
 		}
 	}
 }

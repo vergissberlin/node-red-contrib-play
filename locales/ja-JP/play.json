@@ -5,6 +5,7 @@
 			"player": "プレーヤー",
 			"soundPath": "音声ファイルのパス",
 			"upload": "音声ファイルをアップロード",
+			"preview": "プレビュー",
 			"node": "playa"
 		},
 		"paletteLabel": "音声を再生",
@@ -15,6 +16,12 @@
 		"notify": {
 			"uploadSuccess": "ファイルをアップロードしました",
 			"uploadFail": "アップロードに失敗しました"
+		},
+		"preview": {
+			"errorNotFound": "ファイルが見つからないか読み取れません。",
+			"errorForbidden": "プレビューは Node-RED のユーザーディレクトリ内のファイルにのみ利用できます。",
+			"errorBadRequest": "パスまたはファイルの種類が無効です。",
+			"errorGeneric": "オーディオのプレビューを読み込めませんでした。"
 		}
 	}
 }

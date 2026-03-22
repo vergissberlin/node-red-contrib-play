@@ -5,6 +5,7 @@
 			"player": "播放器",
 			"soundPath": "音频文件路径",
 			"upload": "上传音频文件",
+			"preview": "预览",
 			"node": "playa"
 		},
 		"paletteLabel": "播放声音",
@@ -15,6 +16,12 @@
 		"notify": {
 			"uploadSuccess": "文件已上传",
 			"uploadFail": "上传失败"
+		},
+		"preview": {
+			"errorNotFound": "找不到文件或无法读取。",
+			"errorForbidden": "仅可预览位于 Node-RED 用户目录下的文件。",
+			"errorBadRequest": "路径或文件类型无效。",
+			"errorGeneric": "无法加载音频预览。"
 		}
 	}
 }

@@ -5,6 +5,7 @@
 			"player": "Player",
 			"soundPath": "Sound file path",
 			"upload": "Upload sound file",
+			"preview": "Preview",
 			"node": "playa"
 		},
 		"paletteLabel": "play sound",
@@ -15,6 +16,12 @@
 		"notify": {
 			"uploadSuccess": "File uploaded",
 			"uploadFail": "Upload failed"
+		},
+		"preview": {
+			"errorNotFound": "File not found or not readable.",
+			"errorForbidden": "Preview is only available for files under the Node-RED user directory.",
+			"errorBadRequest": "Invalid path or file type.",
+			"errorGeneric": "Could not load audio preview."
 		}
 	}
 }

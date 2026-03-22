@@ -5,6 +5,7 @@
 			"player": "Reproductor",
 			"soundPath": "Ruta del archivo de audio",
 			"upload": "Subir archivo de audio",
+			"preview": "Vista previa",
 			"node": "playa"
 		},
 		"paletteLabel": "reproducir sonido",
@@ -15,6 +16,12 @@
 		"notify": {
 			"uploadSuccess": "Archivo subido",
 			"uploadFail": "Error al subir"
+		},
+		"preview": {
+			"errorNotFound": "Archivo no encontrado o no legible.",
+			"errorForbidden": "La vista previa solo está disponible para archivos dentro del directorio de usuario de Node-RED.",
+			"errorBadRequest": "Ruta o tipo de archivo no válido.",
+			"errorGeneric": "No se pudo cargar la vista previa de audio."
 		}
 	}
 }

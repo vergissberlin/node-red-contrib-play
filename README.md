@@ -52,6 +52,7 @@ The node **always sends the incoming message** to the output after starting play
 
 - **Name:** Node label in the editor and the **last fallback path** when `msg.payload` and **Sound file path** are empty.
 - **Sound file path:** Optional absolute path on the Node-RED host. You can type it or set it by choosing **Upload sound file** (files are stored under `node-red-contrib-play/uploads` inside your Node-RED user directory, with a generated filename). Allowed extensions: `.wav`, `.mp3`, `.ogg`, `.flac`, `.m4a`, `.aac`; maximum size **10 MB** per upload. Exported flows do **not** include uploaded binaries—copy or back up that folder if you move instances.
+- **Preview:** The dialog includes a small browser **Preview** player that streams the file through the Node-RED admin HTTP API only when the resolved path stays **inside your Node-RED user directory** (same extensions as uploads); paths elsewhere on the host cannot be previewed in the editor.
 - **Player:** Dropdown in the editor lists common players (`afplay`, `mplayer`, `mpg123`, etc.). Runtime selection is performed by `play-sound` based on what is available on your system unless you extend the node to pass a specific player through.
 
 ### Example flow
