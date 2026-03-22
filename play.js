@@ -24,6 +24,15 @@ module.exports = function(RED) {
 	var ALLOWED_EXT = new Set(['.wav', '.mp3', '.ogg', '.flac', '.m4a', '.aac']);
 	var MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 	var UPLOAD_ROUTE = '/contrib-playa/upload';
+	var PREVIEW_ROUTE = '/contrib-playa/preview';
+	var MIME_BY_EXT = {
+		'.wav': 'audio/wav',
+		'.mp3': 'audio/mpeg',
+		'.ogg': 'audio/ogg',
+		'.flac': 'audio/flac',
+		'.m4a': 'audio/mp4',
+		'.aac': 'audio/aac'
+	};
 
 	var uploadDir = path.join(RED.settings.userDir, 'node-red-contrib-play', 'uploads');
 	var storage = multer.diskStorage({
@@ -67,6 +76,59 @@ module.exports = function(RED) {
 				}
 				res.json({ path: req.file.path });
 			});
+		}
+	);
+
+	RED.httpAdmin.get(
+		PREVIEW_ROUTE,
+		RED.auth.needsPermission('flows.read'),
+		function(req, res) {
+			var raw = req.query.path;
+			if (raw == null || String(raw).trim() === '') {
+				return res.status(400).json({ error: 'Missing path' });
+			}
+			var requestedPath = String(raw);
+			var realUser;
+			try {
+				realUser = fs.realpathSync(RED.settings.userDir);
+			} catch (e) {
+				return res.status(500).json({ error: 'User directory unavailable' });
+			}
+			var realFile;
+			try {
+				realFile = fs.realpathSync(path.resolve(requestedPath));
+			} catch (e) {
+				return res.status(404).json({ error: 'Not found' });
+			}
+			var ext = path.extname(realFile).toLowerCase();
+			if (!ALLOWED_EXT.has(ext)) {
+				return res.status(400).json({ error: 'Invalid file type' });
+			}
+			var rel = path.relative(realUser, realFile);
+			if (rel.startsWith('..') || path.isAbsolute(rel)) {
+				return res.status(403).json({ error: 'Forbidden' });
+			}
+			var st;
+			try {
+				st = fs.statSync(realFile);
+			} catch (e) {
+				return res.status(404).json({ error: 'Not found' });
+			}
+			if (!st.isFile()) {
+				return res.status(400).json({ error: 'Not a file' });
+			}
+			var mime = MIME_BY_EXT[ext] || 'application/octet-stream';
+			res.setHeader('Content-Type', mime);
+			res.setHeader('Content-Length', st.size);
+			var stream = fs.createReadStream(realFile);
+			stream.on('error', function() {
+				if (!res.headersSent) {
+					res.status(500).end();
+				} else {
+					res.destroy();
+				}
+			});
+			stream.pipe(res);
 		}
 	);
 

@@ -21,6 +21,9 @@ function loadPlayWithMock(playImpl) {
 		httpAdmin: {
 			post: function post() {
 				// Upload route registration; no-op for unit tests.
+			},
+			get: function get() {
+				// Preview route registration; no-op for unit tests.
 			}
 		},
 		auth: {
