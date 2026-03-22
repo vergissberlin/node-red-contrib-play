@@ -200,6 +200,12 @@ module.exports = function(RED) {
 		}
 	);
 
+	/** @param {*} err */
+	function formatStatusError(err) {
+		var s = err && err.message != null ? String(err.message) : String(err);
+		return s.length > 20 ? s.slice(0, 20) : s;
+	}
+
 	/**
 	 * Player options
 	 *
@@ -218,14 +224,21 @@ module.exports = function(RED) {
 		}
 		var audioPlayer = createPlaySound(playerOpts);
 
+		node.on('close', function() {
+			node.status({});
+		});
+
 		this.on('input', function(msg) {
 			var pathToPlay = msg.payload || soundPath || this.name;
+			node.status({ fill: 'blue', shape: 'dot' });
 			var audio = audioPlayer.play(
 				pathToPlay,
 				function(err) {
 					if (err) {
+						node.status({ fill: 'red', shape: 'dot', text: formatStatusError(err) });
 						return node.error(err);
 					}
+					node.status({});
 				});
 			audio.kill();
 			node.send(msg);

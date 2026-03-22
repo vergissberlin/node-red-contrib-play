@@ -45,6 +45,10 @@ function loadPlayWithMock(playImpl, options) {
 				EventEmitter.call(node);
 				node.name = config.name != null ? config.name : '';
 				node.id = config.id != null ? config.id : 'n1';
+				node._statusLog = [];
+				node.status = function status(s) {
+					node._statusLog.push(s);
+				};
 				node.send = function (msg) {
 					node._sent = msg;
 				};

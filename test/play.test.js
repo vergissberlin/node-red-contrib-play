@@ -11,10 +11,13 @@ describe('playa node', () => {
 		assert.strictEqual(typeof RED._registered.playa, 'function');
 	});
 
-	it('calls play with msg.payload, invokes kill, and sends the same message', () => {
+	it('calls play with msg.payload, invokes kill, and sends the same message', async () => {
 		const events = [];
 		const playImpl = (path, cb) => {
 			events.push({ op: 'play', path, cb });
+			setImmediate(() => {
+				cb(null);
+			});
 			return {
 				kill: () => events.push({ op: 'kill', path })
 			};
@@ -33,6 +36,12 @@ describe('playa node', () => {
 		assert.deepStrictEqual(events[1], { op: 'kill', path: '/tmp/beep.wav' });
 		assert.strictEqual(node._sent, msg);
 		assert.strictEqual(node._err, undefined);
+		assert.deepStrictEqual(node._statusLog, [{ fill: 'blue', shape: 'dot' }]);
+		await new Promise((r) => setImmediate(r));
+		assert.deepStrictEqual(node._statusLog, [
+			{ fill: 'blue', shape: 'dot' },
+			{}
+		]);
 	});
 
 	it('uses configured node name when payload is missing', () => {
@@ -87,6 +96,10 @@ describe('playa node', () => {
 		assert.ok(node._err instanceof Error);
 		assert.strictEqual(node._err.message, 'player failed');
 		assert.strictEqual(node._sent.payload, '/x.wav');
+		assert.deepStrictEqual(node._statusLog, [
+			{ fill: 'blue', shape: 'dot' },
+			{ fill: 'red', shape: 'dot', text: 'player failed' }
+		]);
 	});
 
 	it('reports async play errors on node.error', async () => {
@@ -98,9 +111,41 @@ describe('playa node', () => {
 		const node = new PlayaNode({ name: 'x', id: 'n5' });
 		node.emit('input', { payload: '/y.wav' });
 		assert.strictEqual(node._err, undefined);
+		assert.deepStrictEqual(node._statusLog, [{ fill: 'blue', shape: 'dot' }]);
 		await new Promise((r) => setImmediate(r));
 		assert.ok(node._err instanceof Error);
 		assert.strictEqual(node._err.message, 'async fail');
+		assert.deepStrictEqual(node._statusLog, [
+			{ fill: 'blue', shape: 'dot' },
+			{ fill: 'red', shape: 'dot', text: 'async fail' }
+		]);
+	});
+
+	it('truncates status error text to 20 characters', () => {
+		const longMsg = 'x'.repeat(40);
+		const playImpl = (path, cb) => {
+			cb(new Error(longMsg));
+			return { kill: () => {} };
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({ name: 'x', id: 'n-status-trunc' });
+		node.emit('input', { payload: '/x.wav' });
+		assert.strictEqual(node._statusLog[1].text, longMsg.slice(0, 20));
+	});
+
+	it('clears status on node close', async () => {
+		const playImpl = (path, cb) => {
+			setImmediate(() => cb(null));
+			return { kill: () => {} };
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({ name: 'x', id: 'n-close' });
+		node.emit('input', { payload: '/z.wav' });
+		await new Promise((r) => setImmediate(r));
+		assert.deepStrictEqual(node._statusLog.slice(-1)[0], {});
+		node.emit('close');
+		assert.deepStrictEqual(node._statusLog.slice(-1)[0], {});
+		assert.strictEqual(node._statusLog.length, 3);
 	});
 
 	it('passes explicit player to play-sound factory', () => {
