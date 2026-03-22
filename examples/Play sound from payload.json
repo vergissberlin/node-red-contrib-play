@@ -12,7 +12,7 @@
     "type": "comment",
     "z": "7a3b2c1d.e4f5a6b7",
     "name": "About this example",
-    "info": "Click the inject node’s button to play the audio file path in msg.payload.\nChange the payload to a real WAV or MP3 path on your machine.\nIn the playa node, choose a player that exists on your OS (e.g. afplay on macOS, aplay on many Linux systems).",
+    "info": "Click the inject node’s button to play the audio file path in msg.payload.\nSet the payload to an absolute path on your machine, or to the bundled sample: …/node-red-contrib-play/examples/sounds/beep.wav (see examples/README.md).\nIn the playa node, choose a player that exists on your OS (e.g. afplay on macOS, aplay on many Linux systems).",
     "x": 60,
     "y": 40,
     "wires": []

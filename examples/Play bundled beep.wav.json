@@ -1,0 +1,63 @@
+[
+  {
+    "id": "a1b2c3d4.e5f6a7b8",
+    "type": "tab",
+    "label": "Bundled beep sample",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "b2c3d4e5.f6a7b8c9",
+    "type": "comment",
+    "z": "a1b2c3d4.e5f6a7b8",
+    "name": "Bundled sound",
+    "info": "Plays examples/sounds/beep.wav from this package.\nThe function node builds ~/.node-red/node_modules/node-red-contrib-play/examples/sounds/beep.wav when that layout matches your install (see examples/README.md otherwise).\nSet Player to a CLI that exists on your OS (e.g. aplay on Linux instead of afplay).",
+    "x": 60,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "c3d4e5f6.a7b8c9d0",
+    "type": "inject",
+    "z": "a1b2c3d4.e5f6a7b8",
+    "name": "play bundled beep",
+    "props": [{ "p": "payload" }],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "str",
+    "x": 160,
+    "y": 200,
+    "wires": [["d4e5f6a7.b8c9d0e1"]]
+  },
+  {
+    "id": "d4e5f6a7.b8c9d0e1",
+    "type": "function",
+    "z": "a1b2c3d4.e5f6a7b8",
+    "name": "path to bundled beep.wav",
+    "func": "let home = '';\nif (typeof env !== 'undefined' && typeof env.get === 'function') {\n    home = env.get('HOME') || env.get('USERPROFILE') || '';\n}\nif (!home) {\n    node.error('Could not resolve HOME/USERPROFILE. Set msg.payload to the absolute path of examples/sounds/beep.wav (see examples/README.md).');\n    return null;\n}\nmsg.payload = home + '/.node-red/node_modules/node-red-contrib-play/examples/sounds/beep.wav';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 200,
+    "wires": [["e5f6a7b8.c9d0e1f2"]]
+  },
+  {
+    "id": "e5f6a7b8.c9d0e1f2",
+    "type": "playa",
+    "z": "a1b2c3d4.e5f6a7b8",
+    "name": "",
+    "player": "afplay",
+    "x": 640,
+    "y": 200,
+    "wires": [[]]
+  }
+]

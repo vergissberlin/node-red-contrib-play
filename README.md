@@ -59,9 +59,12 @@ The node **always sends the incoming message** to the output after starting play
 2. Wire **inject** → **playa** → (optional) further nodes.
 3. Deploy and click the inject button.
 
-A ready-made flow is in the package:
+Ready-made flows are in the package (see **`examples/README.md`**):
 
-- Import **`examples/Play sound from payload.json`** via **Menu → Import** in the Node-RED editor.
+- **`examples/Play sound from payload.json`** — set **payload** to an audio file path.
+- **`examples/Play bundled beep.wav.json`** — uses the bundled sample **`examples/sounds/beep.wav`** when your install path matches the default layout.
+
+Import via **Menu → Import** in the Node-RED editor.
 
 Minimal flow (excerpt):
 
