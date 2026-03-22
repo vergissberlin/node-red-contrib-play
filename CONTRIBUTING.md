@@ -24,7 +24,15 @@ The suite uses Node’s built-in test runner:
 pnpm test
 ```
 
-Run this after changes to `play.js`, `play.html`, or tests under `test/`.
+Run this after changes to `play.js`, `play.html`, `lib/`, or tests under `test/`.
+
+## List detected CLI players (same logic as the node)
+
+```bash
+pnpm run players:list
+```
+
+Uses `lib/available-players.js` (also required by `play.js`). Add `--json` on `scripts/print-available-players.mjs` for machine-readable output.
 
 ## Bundled example audio
 

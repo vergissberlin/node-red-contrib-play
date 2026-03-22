@@ -5,7 +5,9 @@
   "main": "play.js",
   "scripts": {
     "test": "node --test test/play.test.js",
-    "examples:encode-mp3": "node scripts/encode-beep-mp3.mjs"
+    "examples:encode-mp3": "node scripts/encode-beep-mp3.mjs",
+    "players:list": "node scripts/print-available-players.mjs",
+    "players:verify-afplay": "node scripts/verify-afplay.mjs"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,7 @@
   ],
   "files": [
     "play.js",
+    "lib",
     "play.html",
     "locales",
     "examples",

@@ -1,11 +1,18 @@
 'use strict';
 
+const path = require('path');
+const fs = require('fs');
 const { describe, it } = require('node:test');
 const assert = require('node:assert');
 const { EventEmitter } = require('events');
 const { loadPlayWithMock } = require('./helpers/load-play-node');
 
+const FIXTURE_WAV = path.join(__dirname, '..', 'examples', 'sounds', 'beep.wav');
+
 describe('playa node', () => {
+	if (!fs.existsSync(FIXTURE_WAV)) {
+		throw new Error('Missing test fixture: ' + FIXTURE_WAV);
+	}
 	it('registers type playa on RED', () => {
 		const playImpl = () => ({ kill: () => {} });
 		const { RED } = loadPlayWithMock(playImpl);
@@ -25,13 +32,13 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'alarm', id: 'n-play-1' });
-		const msg = { payload: '/tmp/beep.wav' };
+		const msg = { payload: FIXTURE_WAV };
 		node.emit('input', msg);
 
 		assert.strictEqual(events.length, 1);
 		assert.deepStrictEqual(events[0], {
 			op: 'play',
-			path: '/tmp/beep.wav',
+			path: FIXTURE_WAV,
 			cb: events[0].cb
 		});
 		assert.strictEqual(node._sent, msg);
@@ -55,12 +62,12 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'x', id: 'n-overlap', stopPrevious: true });
-		node.emit('input', { payload: '/a.wav' });
-		node.emit('input', { payload: '/b.wav' });
+		node.emit('input', { payload: FIXTURE_WAV });
+		node.emit('input', { payload: FIXTURE_WAV });
 		assert.deepStrictEqual(events, [
-			{ op: 'play', path: '/a.wav' },
-			{ op: 'kill', path: '/a.wav' },
-			{ op: 'play', path: '/b.wav' }
+			{ op: 'play', path: FIXTURE_WAV },
+			{ op: 'kill', path: FIXTURE_WAV },
+			{ op: 'play', path: FIXTURE_WAV }
 		]);
 	});
 
@@ -75,11 +82,11 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'x', id: 'n-no-stop', stopPrevious: false });
-		node.emit('input', { payload: '/a.wav' });
-		node.emit('input', { payload: '/b.wav' });
+		node.emit('input', { payload: FIXTURE_WAV });
+		node.emit('input', { payload: FIXTURE_WAV });
 		assert.deepStrictEqual(events, [
-			{ op: 'play', path: '/a.wav' },
-			{ op: 'play', path: '/b.wav' }
+			{ op: 'play', path: FIXTURE_WAV },
+			{ op: 'play', path: FIXTURE_WAV }
 		]);
 	});
 
@@ -90,7 +97,7 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'a', id: 'n-send-end', sendOnEnd: true });
-		const msg = { payload: '/x.wav' };
+		const msg = { payload: FIXTURE_WAV };
 		node.emit('input', msg);
 		assert.strictEqual(node._sent, undefined);
 		await new Promise((r) => setImmediate(r));
@@ -104,9 +111,23 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'x', id: 'n-no-send-err', sendOnEnd: true });
-		node.emit('input', { payload: '/x.wav' });
+		node.emit('input', { payload: FIXTURE_WAV });
 		assert.strictEqual(node._sent, undefined);
 		assert.ok(node._err instanceof Error);
+	});
+
+	it('errors before play when sound file does not exist', () => {
+		let playCalls = 0;
+		const playImpl = () => {
+			playCalls++;
+			return { kill: () => {} };
+		};
+		const { PlayaNode } = loadPlayWithMock(playImpl);
+		const node = new PlayaNode({ name: 'x', id: 'n-missing' });
+		node.emit('input', { payload: '/nonexistent-sound-90210.wav' });
+		assert.strictEqual(playCalls, 0);
+		assert.ok(node._err instanceof Error);
+		assert.match(node._err.message, /not found/i);
 	});
 
 	it('uses configured node name when payload is missing', () => {
@@ -116,9 +137,9 @@ describe('playa node', () => {
 			return { kill: () => {} };
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
-		const node = new PlayaNode({ name: 'default-sound', id: 'n2' });
+		const node = new PlayaNode({ name: FIXTURE_WAV, id: 'n2' });
 		node.emit('input', {});
-		assert.strictEqual(playedPath, 'default-sound');
+		assert.strictEqual(playedPath, FIXTURE_WAV);
 		assert.strictEqual(node._sent.payload, undefined);
 	});
 
@@ -131,11 +152,11 @@ describe('playa node', () => {
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({
 			name: 'fallback-label',
-			soundPath: '/data/uploads/beep.wav',
+			soundPath: FIXTURE_WAV,
 			id: 'n-soundpath'
 		});
 		node.emit('input', {});
-		assert.strictEqual(playedPath, '/data/uploads/beep.wav');
+		assert.strictEqual(playedPath, FIXTURE_WAV);
 	});
 
 	it('uses node name when payload is empty string (falsy)', () => {
@@ -145,9 +166,9 @@ describe('playa node', () => {
 			return { kill: () => {} };
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
-		const node = new PlayaNode({ name: 'fallback', id: 'n3' });
+		const node = new PlayaNode({ name: FIXTURE_WAV, id: 'n3' });
 		node.emit('input', { payload: '' });
-		assert.strictEqual(playedPath, 'fallback');
+		assert.strictEqual(playedPath, FIXTURE_WAV);
 	});
 
 	it('formats non-zero exit code with player and path in the error message', () => {
@@ -157,10 +178,10 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'x', id: 'n-exit-code', player: '' });
-		node.emit('input', { payload: '/data/test.wav' });
+		node.emit('input', { payload: FIXTURE_WAV });
 		assert.ok(node._err instanceof Error);
 		assert.match(node._err.message, /exited with code 1/);
-		assert.match(node._err.message, /\/data\/test\.wav/);
+		assert.ok(node._err.message.includes(FIXTURE_WAV));
 	});
 
 	it('reports error via node.error when play callback receives an error', () => {
@@ -170,10 +191,10 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'x', id: 'n4' });
-		node.emit('input', { payload: '/x.wav' });
+		node.emit('input', { payload: FIXTURE_WAV });
 		assert.ok(node._err instanceof Error);
 		assert.strictEqual(node._err.message, 'player failed');
-		assert.strictEqual(node._sent.payload, '/x.wav');
+		assert.strictEqual(node._sent.payload, FIXTURE_WAV);
 		assert.deepStrictEqual(node._statusLog, [
 			{ fill: 'blue', shape: 'dot' },
 			{ fill: 'red', shape: 'dot', text: 'player failed' }
@@ -191,7 +212,7 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'x', id: 'n-spawn-enoent' });
-		node.emit('input', { payload: '/x.wav' });
+		node.emit('input', { payload: FIXTURE_WAV });
 		await new Promise((r) => setImmediate(r));
 		assert.ok(node._err instanceof Error);
 		assert.strictEqual(node._err.message, 'spawn mplayer ENOENT');
@@ -205,7 +226,7 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'x', id: 'n5' });
-		node.emit('input', { payload: '/y.wav' });
+		node.emit('input', { payload: FIXTURE_WAV });
 		assert.strictEqual(node._err, undefined);
 		assert.deepStrictEqual(node._statusLog, [{ fill: 'blue', shape: 'dot' }]);
 		await new Promise((r) => setImmediate(r));
@@ -225,7 +246,7 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'x', id: 'n-status-trunc' });
-		node.emit('input', { payload: '/x.wav' });
+		node.emit('input', { payload: FIXTURE_WAV });
 		assert.strictEqual(node._statusLog[1].text, longMsg.slice(0, 20));
 	});
 
@@ -236,7 +257,7 @@ describe('playa node', () => {
 		};
 		const { PlayaNode } = loadPlayWithMock(playImpl);
 		const node = new PlayaNode({ name: 'x', id: 'n-close' });
-		node.emit('input', { payload: '/z.wav' });
+		node.emit('input', { payload: FIXTURE_WAV });
 		await new Promise((r) => setImmediate(r));
 		assert.deepStrictEqual(node._statusLog.slice(-1)[0], {});
 		node.emit('close');

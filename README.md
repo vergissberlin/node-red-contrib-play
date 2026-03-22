@@ -38,6 +38,26 @@ SoX is a common way to get the `play` command and broad format support:
 sudo apt-get install sox libsox-fmt-all
 ```
 
+### Listing available players on the host (CLI)
+
+The editor dropdown uses the same discovery as this package’s helper script: it runs `which` / `where` for each known CLI name. It does **not** decode audio files; it only checks that the binary exists on `PATH` for the Node-RED process.
+
+From a clone of this repo (or after `npm install` in the package folder):
+
+```bash
+pnpm run players:list
+# or: node scripts/print-available-players.mjs
+# JSON: node scripts/print-available-players.mjs --json
+```
+
+**macOS:** to confirm `afplay` can open a real file (exit code 0), from the repo:
+
+```bash
+pnpm run players:verify-afplay
+```
+
+If that fails, the problem is outside Node-RED (path, permissions, or `afplay` itself).
+
 ## Usage
 
 ### Message contract
@@ -99,7 +119,7 @@ Replace the payload with a real file path on the machine where Node-RED runs.
 
 - **No sound:** Confirm the file exists, the path is correct for the OS user running Node-RED, and a player binary is installed and on `PATH`.
 - **`spawn … ENOENT`:** The chosen CLI (for example `mplayer`) is not installed or not on `PATH` for the Node-RED process. Install it, use **Automatic** so only players that resolve on this host are used, or pick another **Player**. If you saved a flow from another machine, an invalid player name is ignored with a warning and automatic selection is used.
-- **`Player "…" exited with code 1`:** The process ran but returned failure (common if the **codec/format** is not supported by that CLI, the **path** is wrong, or the file is not readable by the Node-RED user). Try another **Player**, convert the file (e.g. WAV/MP3), or confirm permissions and path on the host.
+- **`Player "…" exited with code 1`:** `afplay` (or another CLI) **started** but rejected the file—often **wrong/missing path**, **unsupported format**, or **permissions**. The node now checks that a **local file exists** before spawning the player. If you still see exit code 1, the file exists but the player cannot decode it—try WAV, another **Player**, or run `pnpm run players:verify-afplay` on macOS to test `afplay` outside Node-RED.
 - **Errors in the debug sidebar:** Read the message from `node.error`; it usually reflects the underlying player or spawn failure.
 
 ## Contributing

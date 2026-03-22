@@ -14,76 +14,22 @@
 module.exports = function(RED) {
 	'use strict';
 
-	var child_process = require('child_process');
 	var crypto = require('crypto');
 	var fs = require('fs');
 	var path = require('path');
 	var multer = require('multer');
 
 	var createPlaySound = require('play-sound');
-
-	var PLAYERS_BY_PLATFORM = {
-		darwin: ['afplay', 'mplayer', 'mpg123', 'mpg321', 'play'],
-		linux: ['aplay', 'mpg123', 'mplayer', 'play', 'omxplayer', 'mpg321', 'cvlc'],
-		win32: ['cmdmp3', 'powershell'],
-		// Prefer common CLI tools before mplayer (often absent); avoids spawn ENOENT on exotic platforms.
-		default: ['mpg123', 'mpg321', 'play', 'cvlc', 'mplayer']
-	};
+	var ap = require('./lib/available-players.js');
 
 	var PLAYERS_ROUTE = '/contrib-playa/players';
 	var cachedPlayersPayload = null;
-
-	function normalizePlatform(platform) {
-		if (platform === 'darwin') {
-			return 'darwin';
-		}
-		if (platform === 'linux') {
-			return 'linux';
-		}
-		if (platform === 'win32') {
-			return 'win32';
-		}
-		return 'default';
-	}
-
-	function playersForPlatform(platform) {
-		var key = normalizePlatform(platform);
-		var list = PLAYERS_BY_PLATFORM[key];
-		return list && list.length ? list.slice() : PLAYERS_BY_PLATFORM.default.slice();
-	}
-
-	function commandExists(cmd) {
-		try {
-			if (process.platform === 'win32') {
-				child_process.execSync('where ' + cmd, {stdio: 'ignore'});
-			} else {
-				child_process.execSync('which ' + cmd, {stdio: 'ignore'});
-			}
-			return true;
-		} catch (e) {
-			return false;
-		}
-	}
-
-	function filterPlayersOnPath(candidates) {
-		return candidates.filter(commandExists);
-	}
-
-	function playersResolvedForPlay(platform) {
-		var raw = playersForPlatform(platform);
-		var available = filterPlayersOnPath(raw);
-		return available.length ? available : raw;
-	}
 
 	function getPlayersApiPayload() {
 		if (cachedPlayersPayload) {
 			return cachedPlayersPayload;
 		}
-		var raw = playersForPlatform(process.platform);
-		cachedPlayersPayload = {
-			platform: process.platform,
-			players: filterPlayersOnPath(raw)
-		};
+		cachedPlayersPayload = ap.getPlayersPayloadForPlatform(process.platform);
 		return cachedPlayersPayload;
 	}
 
@@ -206,6 +152,58 @@ module.exports = function(RED) {
 		}
 	);
 
+	/**
+	 * Resolve local file path or pass through http(s) URL (player-dependent).
+	 * Prevents spawning afplay etc. with a missing path (exit code 1) when the binary is fine.
+	 *
+	 * @param {*} raw
+	 * @returns {{ ok: true, path: string } | { ok: false, error: Error }}
+	 */
+	function resolveSoundFile(raw) {
+		if (raw == null) {
+			return { ok: false, error: new Error('No sound file path') };
+		}
+		var s = String(raw).trim();
+		if (!s) {
+			return { ok: false, error: new Error('No sound file path') };
+		}
+		if (/^https?:\/\//i.test(s)) {
+			return { ok: true, path: s };
+		}
+		var tries = [s];
+		if (!path.isAbsolute(s)) {
+			tries.push(path.resolve(s));
+			tries.push(path.join(process.cwd(), s));
+		}
+		for (var i = 0; i < tries.length; i++) {
+			var p = tries[i];
+			try {
+				if (fs.existsSync(p)) {
+					var st = fs.statSync(p);
+					if (st.isFile()) {
+						return { ok: true, path: path.normalize(p) };
+					}
+					if (st.isDirectory()) {
+						return {
+							ok: false,
+							error: new Error('Sound path is a directory, not a file: ' + s)
+						};
+					}
+				}
+			} catch (e) {
+				// try next candidate
+			}
+		}
+		return {
+			ok: false,
+			error: new Error(
+				'Sound file not found: ' +
+					s +
+					'. Use msg.payload, Sound file path, or node name as a path that exists on the Node-RED host.'
+			)
+		};
+	}
+
 	/** @param {*} err */
 	function formatStatusError(err) {
 		var s = err && err.message != null ? String(err.message) : String(err);
@@ -254,7 +252,7 @@ module.exports = function(RED) {
 		var playerName = (config.player != null && String(config.player).trim()) || '';
 		var stopPrevious = config.stopPrevious !== false;
 		var sendOnEnd = config.sendOnEnd === true;
-		if (playerName && !commandExists(playerName)) {
+		if (playerName && !ap.commandExists(playerName)) {
 			node.warn(
 				'Player "' +
 					playerName +
@@ -266,7 +264,7 @@ module.exports = function(RED) {
 		if (playerName) {
 			playerOpts.player = playerName;
 		} else {
-			playerOpts.players = playersResolvedForPlay(process.platform);
+			playerOpts.players = ap.playersResolvedForPlay(process.platform);
 		}
 		var audioPlayer = createPlaySound(playerOpts);
 
@@ -292,7 +290,15 @@ module.exports = function(RED) {
 		});
 
 		this.on('input', function(msg) {
-			var pathToPlay = msg.payload || soundPath || this.name;
+			var rawPath = msg.payload || soundPath || this.name;
+			var resolvedPath = resolveSoundFile(rawPath);
+			if (!resolvedPath.ok) {
+				node.status({ fill: 'red', shape: 'dot', text: formatStatusError(resolvedPath.error) });
+				node.error(resolvedPath.error);
+				return;
+			}
+			var pathToPlay = resolvedPath.path;
+
 			node.status({ fill: 'blue', shape: 'dot' });
 
 			if (stopPrevious && currentChild) {
