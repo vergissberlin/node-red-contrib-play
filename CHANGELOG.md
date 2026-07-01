@@ -7,6 +7,22 @@
 * Editor UI and Info sidebar help for **playa** internationalised in ten locales: en-US, zh-CN, es-ES, hi-IN, ar-EG, fr-FR, pt-BR, de-DE, ja-JP, ru-RU (follows the Node-RED editor language).
 * **examples:** add bundled samples `examples/sounds/beep.wav` and `beep.mp3`, `examples/README.md`, flows `Play bundled beep.wav.json`, `Play bundled beep.mp3.json`, and `Play bundled beep compare wav and mp3.json`; script `scripts/encode-beep-mp3.mjs` to regenerate the MP3 from the WAV.
 
+## [0.2.2](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.2.1...v0.2.2) (2026-07-01)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump multer from 2.1.1 to 2.2.0 ([30ecf74](https://github.com/vergissberlin/node-red-contrib-play/commit/30ecf7430cc2d64ba2db6c47cc19d6836b56d5db))
+* **deps:** bump multer from 2.1.1 to 2.2.0 ([669dedd](https://github.com/vergissberlin/node-red-contrib-play/commit/669dedd130af30419e3b8d926333c529ddc024cd))
+* **deps:** update dependency music-metadata to v11.13.0 ([4735dd1](https://github.com/vergissberlin/node-red-contrib-play/commit/4735dd16a4cf8606c624e2257c51074a51ed1286))
+* **deps:** update dependency music-metadata to v11.13.0 ([29e7c73](https://github.com/vergissberlin/node-red-contrib-play/commit/29e7c73d5b3442c08ec21d7374a0e1583fd3a46e))
+
+
+### Documentation
+
+* add RAILWAY.md for Railway deployment instructions ([dc5bbd6](https://github.com/vergissberlin/node-red-contrib-play/commit/dc5bbd6f26f55c20d44891a6204559c782a2d2d3))
+* update README.md with deployment and hosting section ([dc5bbd6](https://github.com/vergissberlin/node-red-contrib-play/commit/dc5bbd6f26f55c20d44891a6204559c782a2d2d3))
+
 ## [0.2.1](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.2.0...v0.2.1) (2026-03-22)
 
 
