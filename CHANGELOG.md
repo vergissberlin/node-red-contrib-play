@@ -7,6 +7,15 @@
 * Editor UI and Info sidebar help for **playa** internationalised in ten locales: en-US, zh-CN, es-ES, hi-IN, ar-EG, fr-FR, pt-BR, de-DE, ja-JP, ru-RU (follows the Node-RED editor language).
 * **examples:** add bundled samples `examples/sounds/beep.wav` and `beep.mp3`, `examples/README.md`, flows `Play bundled beep.wav.json`, `Play bundled beep.mp3.json`, and `Play bundled beep compare wav and mp3.json`; script `scripts/encode-beep-mp3.mjs` to regenerate the MP3 from the WAV.
 
+## [0.2.5](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.2.4...v0.2.5) (2026-08-09)
+
+
+### Documentation
+
+* add AGENTS.md with Node.js version sync rule ([5e639d4](https://github.com/vergissberlin/node-red-contrib-play/commit/5e639d44a3b6be6b8455f02b2a0abd812fab4528))
+* update Node.js prerequisite to &gt;=22.13 ([c8d4e26](https://github.com/vergissberlin/node-red-contrib-play/commit/c8d4e26fbd1b7fd3ed2da114ca9e8c0b721fab4e))
+* update Node.js requirement to reflect pnpm v11 / engines.node bump ([415ed99](https://github.com/vergissberlin/node-red-contrib-play/commit/415ed998e9dd5518f5ca5c5704f6861a73b34bb7))
+
 ## [0.2.4](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.2.3...v0.2.4) (2026-08-09)
 
 
