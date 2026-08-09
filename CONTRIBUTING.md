@@ -4,7 +4,7 @@ This document explains how to work on **node-red-contrib-play** locally: run tes
 
 ## Prerequisites
 
-- **Node.js** 18 or newer (see `engines` in `package.json`).
+- **Node.js** 22.13 or newer (see `engines` in `package.json`).
 - **pnpm** (preferred for this repo).
 - A running **Node-RED** 2.x or newer if you want to exercise the node in the editor (see [Node-RED installation](https://nodered.org/docs/getting-started/installation)).
 
