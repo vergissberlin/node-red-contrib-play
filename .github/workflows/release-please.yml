@@ -44,7 +44,7 @@ jobs:
       # PAT fallback if GITHUB_TOKEN cannot create releases (org policy): create secret RELEASE_PLEASE_TOKEN,
       # then add under this step: `with: { token: ${{ secrets.RELEASE_PLEASE_TOKEN }} }`
       - id: release
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@v5
 
   publish-npm:
     needs: release-please
@@ -53,13 +53,13 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v5
+      - uses: pnpm/action-setup@v6
         with:
-          version: 10
+          version: 11
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
