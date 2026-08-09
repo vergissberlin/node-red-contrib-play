@@ -12,7 +12,7 @@ The **playa** node receives a message, asks the underlying [`play-sound`](https:
 ## Requirements
 
 - **Node-RED** `>= 2.0.0`
-- **Node.js** `>= 18`
+- **Node.js** `>= 22.13`
 - A **supported audio CLI** on the machine running Node-RED (see [play-sound](https://www.npmjs.com/package/play-sound)). Typical choices:
   - **macOS:** `afplay` (often preinstalled)
   - **Linux:** `aplay`, `mpg123`, `mplayer`, or SoX `play` (package names vary by distribution)
@@ -82,7 +82,7 @@ Runtime and packaging expectations when you ship Node-RED with this node.
 
 ### Deployment Dependencies
 
-- **Node.js** `>= 18` and **Node-RED** `>= 2.0.0` (see [Requirements](#requirements)).
+- **Node.js** `>= 22.13` and **Node-RED** `>= 2.0.0` (see [Requirements](#requirements)).
 - **Audio CLI** on the host `PATH` (see [Requirements](#requirements) and [Install](#install)); install the right packages in the image or OS before starting Node-RED.
 - **Permissions:** the OS user running Node-RED must be able to read sound files and execute the chosen player.
 - **Containers:** install a player inside the image, keep file paths valid inside the container, and grant device or audio access if your stack requires it (e.g. ALSA/Pulse on Linux).
