@@ -7,6 +7,15 @@
 * Editor UI and Info sidebar help for **playa** internationalised in ten locales: en-US, zh-CN, es-ES, hi-IN, ar-EG, fr-FR, pt-BR, de-DE, ja-JP, ru-RU (follows the Node-RED editor language).
 * **examples:** add bundled samples `examples/sounds/beep.wav` and `beep.mp3`, `examples/README.md`, flows `Play bundled beep.wav.json`, `Play bundled beep.mp3.json`, and `Play bundled beep compare wav and mp3.json`; script `scripts/encode-beep-mp3.mjs` to regenerate the MP3 from the WAV.
 
+## [0.2.4](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.2.3...v0.2.4) (2026-08-09)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/checkout, actions/setup-node, pnpm/action-setup and pnpm to v11 ([4093772](https://github.com/vergissberlin/node-red-contrib-play/commit/4093772d71147242b74886f4961230785f5c8346))
+* **deps:** bump engines.node to &gt;=22.13 for pnpm v11 ([e87b747](https://github.com/vergissberlin/node-red-contrib-play/commit/e87b747e9ae64f3d8a2a05c235c113564e6a7b15))
+* **deps:** bump release-please-action to v5, checkout/setup-node/pnpm to match test-reusable.yml ([63ab897](https://github.com/vergissberlin/node-red-contrib-play/commit/63ab89757b4585c6615f0efe5e24a30be0b898c1))
+
 ## [0.2.3](https://github.com/vergissberlin/node-red-contrib-play/compare/v0.2.2...v0.2.3) (2026-08-09)
 
 
